@@ -5,6 +5,7 @@ import { appRouter } from './routers/index';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
+import { handle } from '@hono/node-server/vercel';
 
 const app = new Hono();
 
@@ -47,4 +48,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Export for Vercel
-export default app;
+export default handle(app);
