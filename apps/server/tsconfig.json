@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
@@ -9,15 +9,18 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
-          },
+    },
     "outDir": "./dist",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "composite": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
   "tsc-alias": {
     "resolveFullPaths": true
   }

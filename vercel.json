@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "name": "portfolio-web",
+      "source": "apps/web"
+    },
+    {
+      "name": "portfolio-server",
+      "source": "apps/server"
+    }
+  ]
+}
