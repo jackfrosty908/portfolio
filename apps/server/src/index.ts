@@ -13,23 +13,7 @@ app.use(logger());
 app.use(
   '/*',
   cors({
-    origin: (origin) => {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return origin;
-
-      // Allow localhost for development
-      if (origin.includes('localhost')) return origin;
-
-      // Allow your production domains
-      const allowedDomains = [
-        'https://jackfoster.dev',
-        'vercel.app', // This allows all Vercel preview deployments
-      ];
-
-      return allowedDomains.some((domain) => origin.includes(domain))
-        ? origin
-        : null;
-    },
+    origin: '*',
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
   })
