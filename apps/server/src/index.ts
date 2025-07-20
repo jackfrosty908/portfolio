@@ -5,7 +5,6 @@ import { appRouter } from './routers/index';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { handle } from '@hono/node-server/vercel';
 
 const app = new Hono();
 
@@ -34,19 +33,4 @@ app.get('/', (c) => {
   return c.text('OK');
 });
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const { serve } = await import('@hono/node-server');
-  serve(
-    {
-      fetch: app.fetch,
-      port: 3000,
-    },
-    (info) => {
-      console.log(`Server is running on http://localhost:${info.port}`);
-    }
-  );
-}
-
-// Export for Vercel
-export default handle(app);
+export default app;
