@@ -1,36 +1,50 @@
-import 'dotenv/config';
-import { trpcServer } from '@hono/trpc-server';
-import { createContext } from './lib/context';
-import { appRouter } from './routers/index';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
+// import 'dotenv/config';
+// import { trpcServer } from '@hono/trpc-server';
+// import { createContext } from './lib/context';
+// import { appRouter } from './routers/index';
+// import { Hono } from 'hono';
+// import { cors } from 'hono/cors';
+// import { logger } from 'hono/logger';
 
-const app = new Hono();
+// const app = new Hono();
 
-app.use(logger());
+// app.use(logger());
+// // app.use(
+// //   '/*',
+// //   cors({
+// //     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+// //     allowMethods: ['GET', 'POST', 'OPTIONS'],
+// //     credentials: true,
+// //     allowHeaders: ['Content-Type'],
+// //   })
+// // );
+
 // app.use(
-//   '/*',
-//   cors({
-//     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-//     allowMethods: ['GET', 'POST', 'OPTIONS'],
-//     credentials: true,
-//     allowHeaders: ['Content-Type'],
+//   '/trpc/*',
+//   trpcServer({
+//     router: appRouter,
+//     createContext: (_opts, context) => {
+//       return createContext({ context });
+//     },
 //   })
 // );
 
-app.use(
-  '/trpc/*',
-  trpcServer({
-    router: appRouter,
-    createContext: (_opts, context) => {
-      return createContext({ context });
-    },
-  })
-);
+// app.get('/', (c) => {
+//   return c.text('OK');
+// });
+
+// export default app;
+
+import { Hono } from 'hono';
+
+const app = new Hono();
 
 app.get('/', (c) => {
-  return c.text('OK');
+  return c.text('Hello World from Cloudflare Workers!');
+});
+
+app.get('/test', (c) => {
+  return c.json({ message: 'Test endpoint working' });
 });
 
 export default app;
