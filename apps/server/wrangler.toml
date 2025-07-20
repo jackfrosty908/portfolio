@@ -1,3 +1,4 @@
 name = "portfolio-api"
 main = "dist/src/index.js"
 compatibility_date = "2024-07-25"
+compatibility_flags = ["nodejs_compat"]
