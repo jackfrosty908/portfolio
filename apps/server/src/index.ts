@@ -9,15 +9,15 @@ import { logger } from 'hono/logger';
 const app = new Hono();
 
 app.use(logger());
-app.use(
-  '/*',
-  cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    allowMethods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-    allowHeaders: ['Content-Type'],
-  })
-);
+// app.use(
+//   '/*',
+//   cors({
+//     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+//     allowMethods: ['GET', 'POST', 'OPTIONS'],
+//     credentials: true,
+//     allowHeaders: ['Content-Type'],
+//   })
+// );
 
 app.use(
   '/trpc/*',
