@@ -26,18 +26,22 @@ app.use(
   })
 );
 
-app.use(
-  '/trpc/*',
-  trpcServer({
-    router: appRouter,
-    createContext: (_opts, context) => {
-      return createContext({ context });
-    },
-  })
-);
+// app.get('/', (c) => {
+//   return c.text('OK');
+// });
+
+// export default app;
+
+import { Hono } from 'hono';
+
+const app = new Hono();
 
 app.get('/', (c) => {
-  return c.text('OK');
+  return c.text('Hello World from Cloudflare Workers!');
+});
+
+app.get('/test', (c) => {
+  return c.json({ message: 'Test endpoint working' });
 });
 
 export default app;
