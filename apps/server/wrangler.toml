@@ -1,8 +1,12 @@
 name = "portfolio-api"
 main = "dist/src/index.js"
 compatibility_date = "2024-09-23"
-compatibility_flags = ["nodejs_compat"]
 
+# Default environment (dev branch)
 [vars]
-CORS_ORIGIN = "default"
-DATABASE_URL = "default"
+CORS_ORIGIN = "https://www.dev.jackfoster.dev"
+
+# Production environment (main branch)
+[env.production]
+name = "portfolio-api-prod"
+vars = { CORS_ORIGIN = "https://www.jackfoster.dev" }
