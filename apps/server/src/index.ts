@@ -13,9 +13,10 @@ app.use(logger());
 app.use(
   '/*',
   cors({
-    origin: '*',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     credentials: true,
+    allowHeaders: ['Content-Type'],
   })
 );
 
@@ -33,10 +34,9 @@ app.get('/', (c) => {
   return c.text('OK');
 });
 
-import { serve } from '@hono/node-server';
-
 // For local development
 if (process.env.NODE_ENV !== 'production') {
+  const { serve } = await import('@hono/node-server');
   serve(
     {
       fetch: app.fetch,
