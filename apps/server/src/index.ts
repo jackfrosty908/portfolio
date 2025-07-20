@@ -1,20 +1,28 @@
-import 'dotenv/config';
 import { trpcServer } from '@hono/trpc-server';
 import { createContext } from './lib/context';
 import { appRouter } from './routers/index';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { handle } from '@hono/node-server/vercel';
 
-const app = new Hono();
+type Bindings = {
+  CORS_ORIGIN?: string;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
 
 app.use(logger());
+
 app.use(
   '/*',
   cors({
-    origin: process.env.CORS_ORIGIN || '',
+    origin: (_, c) => {
+      const allowedOrigin = c.env?.CORS_ORIGIN || process.env.CORS_ORIGIN;
+      return allowedOrigin;
+    },
     allowMethods: ['GET', 'POST', 'OPTIONS'],
+    allowHeaders: ['Content-Type'],
+    credentials: true,
   })
 );
 
@@ -32,20 +40,4 @@ app.get('/', (c) => {
   return c.text('OK');
 });
 
-import { serve } from '@hono/node-server';
-
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  serve(
-    {
-      fetch: app.fetch,
-      port: 3000,
-    },
-    (info) => {
-      console.log(`Server is running on http://localhost:${info.port}`);
-    }
-  );
-}
-
-// Export for Vercel
-export default handle(app);
+export default app;
