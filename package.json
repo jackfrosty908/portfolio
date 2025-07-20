@@ -26,9 +26,6 @@
   "packageManager": "pnpm@10.13.1",
   "pnpm": {
     "allowed-build-scripts-in-workspace": [
-      "@tailwindcss/oxide",
-      "esbuild",
-      "sharp",
       "workerd"
     ]
   }
