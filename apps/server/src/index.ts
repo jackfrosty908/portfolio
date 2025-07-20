@@ -42,7 +42,7 @@ app.use(logger());
 app.use(
   '/*',
   cors({
-    origin: process.env.CORS_ORIGIN || '*', //TODO: JF remove once deployments work
+    origin: process.env.CORS_ORIGIN || '',
     allowMethods: ['GET', 'POST', 'OPTIONS'],
   })
 );
