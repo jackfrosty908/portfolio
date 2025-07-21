@@ -96,4 +96,37 @@ describe('ModeToggle', () => {
 
     expect(mockSetTheme).toHaveBeenCalledTimes(3);
   });
+
+  it('calls setTheme with "light" when light menu item is clicked', () => {
+    const component = ModeToggle();
+    const dropdownContent = component.props.children[1];
+    const lightMenuItem = dropdownContent.props.children[0];
+
+    // Trigger the onClick handler
+    lightMenuItem.props.onClick();
+
+    expect(mockSetTheme).toHaveBeenCalledWith('light');
+  });
+
+  it('calls setTheme with "dark" when dark menu item is clicked', () => {
+    const component = ModeToggle();
+    const dropdownContent = component.props.children[1];
+    const darkMenuItem = dropdownContent.props.children[1];
+
+    // Trigger the onClick handler
+    darkMenuItem.props.onClick();
+
+    expect(mockSetTheme).toHaveBeenCalledWith('dark');
+  });
+
+  it('calls setTheme with "system" when system menu item is clicked', () => {
+    const component = ModeToggle();
+    const dropdownContent = component.props.children[1];
+    const systemMenuItem = dropdownContent.props.children[2];
+
+    // Trigger the onClick handler
+    systemMenuItem.props.onClick();
+
+    expect(mockSetTheme).toHaveBeenCalledWith('system');
+  });
 });

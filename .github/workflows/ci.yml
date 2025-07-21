@@ -10,6 +10,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     name: CI
+
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,3 +53,14 @@ jobs:
 
       - name: Build all apps
         run: pnpm run build
+
+      - name: Run tests with coverage
+        run: pnpm run test --filter web
+
+      - name: Report Coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: ./apps/web
+          json-summary-path: ./apps/web/coverage/coverage-summary.json
+          json-final-path: ./apps/web/coverage/coverage-final.json
