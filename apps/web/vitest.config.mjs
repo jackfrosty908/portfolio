@@ -1,0 +1,66 @@
+import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  plugins: [tsconfigPaths(), react()],
+  test: {
+    environment: 'jsdom',
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        // Config files
+        '**/*.config.*',
+        '**/next.config.*',
+        '**/postcss.config.*',
+        '**/tailwind.config.*',
+        '**/vite.config.*',
+        '**/vitest.config.*',
+        '**/tsconfig.json',
+        '**/components.json',
+
+        // Build output and dependencies
+        'node_modules/**',
+        'dist/**',
+        'build/**',
+        '.next/**',
+
+        // Test files
+        '**/*.test.*',
+        '**/*.spec.*',
+        '**/test/**',
+        '**/tests/**',
+
+        // Type definitions
+        '**/*.d.ts',
+        '**/types/**',
+
+        // Entry points that are just re-exports
+        '**/index.ts',
+        '**/index.js',
+
+        // Shadcn/ui components - default components, won't be tested until they are changed
+        '**/src/client/components/ui/**',
+
+        // TRPC and API setup - configuration code
+        '**/src/client/utils/trpc.ts',
+
+        // Utility functions - simple wrappers around well-tested libraries
+        '**/src/client/lib/utils.ts',
+
+        // Environment files
+        '**/.env*',
+
+        // Documentation
+        '**/*.md',
+
+        // Misc
+        '**/.gitignore',
+        '**/README*',
+
+        // Provider components - simple wrappers around third-party providers
+        '**/src/client/providers/**',
+      ],
+    },
+  },
+});
