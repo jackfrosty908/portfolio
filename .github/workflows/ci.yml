@@ -63,5 +63,5 @@ jobs:
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           working-directory: ./apps/web
-          json-summary-path: ./apps/web/coverage/coverage-summary.json
-          json-final-path: ./apps/web/coverage/coverage-final.json
+          json-summary-path: ./coverage/coverage-summary.json
+          json-final-path: ./coverage/coverage-final.json
