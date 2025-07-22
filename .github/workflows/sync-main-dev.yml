@@ -1,0 +1,44 @@
+name: Sync main → dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Check out dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Merge main into dev
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git fetch origin main
+          if ! git merge --no-ff --no-edit origin/main; then
+            echo "::error::Merge conflict detected. Please resolve conflicts manually."
+            exit 1
+          fi
+        
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: sync main into dev"
+          title: "chore: sync main into dev"
+          body: |
+            This PR was auto-generated to sync changes from `main` into `dev`.
+            
+            - Please review the changes.
+            - Resolve any conflicts if they arise.
+          branch: "chore/sync-main-to-dev"
+          base: "dev"
+          labels: "automerge"
