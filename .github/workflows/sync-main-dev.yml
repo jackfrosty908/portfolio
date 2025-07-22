@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: dev
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Merge main into dev
         run: |
@@ -31,7 +32,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACTIONS_PAT }}
           commit-message: "chore: sync main into dev"
           title: "chore: sync main into dev"
           body: |
