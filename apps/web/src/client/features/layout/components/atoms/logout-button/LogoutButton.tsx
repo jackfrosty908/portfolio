@@ -10,12 +10,17 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     setIsLoading(true);
-    const supabase = await createClient();
-    const result = await supabase.auth.signOut();
-    console.log(result);
-    router.push("/");
-    router.refresh();
-    setIsLoading(false);
+    try {
+      const supabase = await createClient();
+      const result = await supabase.auth.signOut();
+      console.log(result);
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
