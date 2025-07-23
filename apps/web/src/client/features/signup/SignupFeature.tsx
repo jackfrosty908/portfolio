@@ -12,15 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/client/features/common/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/client/features/common/components/ui/form";
-import { Input } from "@/client/features/common/components/ui/input";
+import { Form } from "@/client/features/common/components/ui/form";
+import FormInput from "@/client/features/signup/components/atoms/FormInput";
 import { type SignupState, signup } from "@/common/actions/supabase/actions";
 
 const formSchema = z.object({
@@ -66,81 +59,35 @@ const SignupFeature = () => {
         <CardContent>
           <Form {...form}>
             <form action={formAction} className="flex flex-col gap-6">
-              <FormField
-                control={form.control}
+              <FormInput
+                form={form}
+                state={state}
                 name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    {state?.errors?.firstName && (
-                      <p className="text-red-500 text-sm">
-                        {state.errors.firstName[0]}
-                      </p>
-                    )}
-                  </FormItem>
-                )}
+                label="First Name"
+                placeholder="John"
               />
-              <FormField
-                control={form.control}
+              <FormInput
+                form={form}
+                state={state}
                 name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    {state?.errors?.lastName && (
-                      <p className="text-red-500 text-sm">
-                        {state.errors.lastName[0]}
-                      </p>
-                    )}
-                  </FormItem>
-                )}
+                label="Last Name"
+                placeholder="Doe"
               />
-              <FormField
-                control={form.control}
+              <FormInput
+                form={form}
+                state={state}
                 name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="m@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                    {state?.errors?.email && (
-                      <p className="text-red-500 text-sm">
-                        {state.errors.email[0]}
-                      </p>
-                    )}
-                  </FormItem>
-                )}
+                label="Email"
+                placeholder="m@example.com"
+                type="email"
               />
-              <FormField
-                control={form.control}
+              <FormInput
+                form={form}
+                state={state}
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    {state?.errors?.password && (
-                      <p className="text-red-500 text-sm">
-                        {state.errors.password[0]}
-                      </p>
-                    )}
-                  </FormItem>
-                )}
+                label="Password"
+                placeholder=""
+                type="password"
               />
 
               <div className="flex flex-col gap-3">

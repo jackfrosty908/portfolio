@@ -76,7 +76,7 @@ export async function signup(prevState: SignupState, formData: FormData) {
 
   if (error) {
     return {
-      serverError: error.message,
+      serverError: "Whoops, something went wrong. Please try again.",
     };
   }
 
