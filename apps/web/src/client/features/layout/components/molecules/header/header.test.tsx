@@ -1,8 +1,41 @@
-import { createElement } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Header from './header';
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import Header from "./header";
 
-vi.mock('next/link', () => ({
+// Hoist the mock function creation before imports
+const { mockCreateClient } = vi.hoisted(() => {
+  return {
+    mockCreateClient: vi.fn(),
+  };
+});
+
+// Mock server-side Supabase client
+vi.mock("@/server/utils/supabase-server", () => ({
+  createClient: mockCreateClient,
+}));
+
+// Mock LogoutButton component
+vi.mock(
+  "@/client/features/layout/components/atoms/logout-button/LogoutButton",
+  () => ({
+    default: () => (
+      <button type="button" data-testid="logout-button">
+        Logout
+      </button>
+    ),
+  }),
+);
+
+// Mock ModeToggle component
+vi.mock(
+  "@/features/layout/components/molecules/mode-toggle/mode-toggle",
+  () => ({
+    ModeToggle: () => <div data-testid="mode-toggle">ModeToggle</div>,
+  }),
+);
+
+// Mock Next.js Link
+vi.mock("next/link", () => ({
   default: ({
     children,
     href,
@@ -11,81 +44,184 @@ vi.mock('next/link', () => ({
     children: React.ReactNode;
     href: string;
     [key: string]: unknown;
-  }) =>
-    createElement('a', { 'data-testid': 'nav-link', href, ...props }, children),
+  }) => (
+    <a href={href} data-testid="nav-link" {...props}>
+      {children}
+    </a>
+  ),
 }));
 
-vi.mock(
-  '@/features/layout/components/molecules/mode-toggle/mode-toggle',
-  () => ({
-    ModeToggle: () =>
-      createElement('div', { 'data-testid': 'mode-toggle' }, 'ModeToggle'),
-  })
-);
-
-describe('Header', () => {
+describe("Header", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('exports Header function', () => {
-    expect(typeof Header).toBe('function');
+  afterEach(() => {
+    cleanup();
   });
 
-  it('renders without crashing', () => {
-    const component = createElement(Header);
-    expect(component).toBeDefined();
-    expect(component.type).toBe(Header);
+  describe("when user is not authenticated", () => {
+    beforeEach(() => {
+      mockCreateClient.mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({
+            data: { user: null },
+          }),
+        },
+      } as any);
+    });
+
+    it("renders navigation links", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Signup" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: "Forgot Password" }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders correct href attributes for navigation links", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
+        "href",
+        "/",
+      );
+      expect(screen.getByRole("link", { name: "Login" })).toHaveAttribute(
+        "href",
+        "/login",
+      );
+      expect(screen.getByRole("link", { name: "Signup" })).toHaveAttribute(
+        "href",
+        "/signup",
+      );
+      expect(
+        screen.getByRole("link", { name: "Forgot Password" }),
+      ).toHaveAttribute("href", "/forgot-password");
+    });
+
+    it("renders ModeToggle component", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+    });
+
+    it("does not render user greeting or logout button", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.queryByText(/Hello,/)).not.toBeInTheDocument();
+      expect(screen.queryByTestId("logout-button")).not.toBeInTheDocument();
+    });
+
+    it("renders horizontal rule separator", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByRole("separator")).toBeInTheDocument();
+    });
   });
 
-  it('renders the correct structure', () => {
-    const component = Header();
-    expect(component).toBeDefined();
-    expect(component.type).toBe('div');
-  });
-
-  it('includes navigation with home link', () => {
-    const TestWrapper = () => {
-      const result = Header();
-      return result;
+  describe("when user is authenticated", () => {
+    const mockUser = {
+      user_metadata: {
+        first_name: "John",
+      },
     };
 
-    const wrapper = createElement(TestWrapper);
-    expect(wrapper).toBeDefined();
+    beforeEach(() => {
+      mockCreateClient.mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({
+            data: { user: mockUser },
+          }),
+        },
+      } as any);
+    });
+
+    it("renders user greeting with first name", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByText("Hello, John")).toBeInTheDocument();
+    });
+
+    it("renders logout button", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByTestId("logout-button")).toBeInTheDocument();
+    });
+
+    it("renders all navigation links", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Signup" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: "Forgot Password" }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders ModeToggle component", async () => {
+      const HeaderComponent = await Header();
+      render(HeaderComponent);
+
+      expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+    });
   });
 
-  it('includes ModeToggle component', () => {
-    const component = Header();
-    expect(component).toBeDefined();
-  });
+  describe("component structure", () => {
+    beforeEach(() => {
+      mockCreateClient.mockResolvedValue({
+        auth: {
+          getUser: vi.fn().mockResolvedValue({
+            data: { user: null },
+          }),
+        },
+      } as any);
+    });
 
-  it('has proper component structure with main container and hr', () => {
-    const component = Header();
-    expect(component.type).toBe('div');
-  });
+    it("has correct container structure", async () => {
+      const HeaderComponent = await Header();
+      const { container } = render(HeaderComponent);
 
-  it('navigation structure contains links array', () => {
-    const TestWrapper = () => {
-      return Header();
-    };
+      const flexContainer = container.querySelector(
+        ".flex.flex-row.items-center.justify-between.px-2.py-1",
+      );
+      expect(flexContainer).toBeInTheDocument();
+      expect(flexContainer).toHaveClass(
+        "flex",
+        "flex-row",
+        "items-center",
+        "justify-between",
+        "px-2",
+        "py-1",
+      );
+    });
 
-    const wrapper = createElement(TestWrapper);
-    expect(wrapper).toBeDefined();
-  });
+    it("calls Supabase auth.getUser", async () => {
+      const mockGetUser = vi.fn().mockResolvedValue({
+        data: { user: null },
+      });
 
-  it('renders with expected className structure', () => {
-    const component = Header();
-    expect(component.props.children).toBeDefined();
-  });
+      mockCreateClient.mockResolvedValue({
+        auth: {
+          getUser: mockGetUser,
+        },
+      } as any);
 
-  it('home link has correct href', () => {
-    const TestWrapper = () => Header();
-    const wrapper = createElement(TestWrapper);
-    expect(wrapper).toBeDefined();
-  });
+      await Header();
 
-  it('contains horizontal rule separator', () => {
-    const component = Header();
-    expect(component.props.children).toBeDefined();
+      expect(mockCreateClient).toHaveBeenCalledOnce();
+      expect(mockGetUser).toHaveBeenCalledOnce();
+    });
   });
 });
