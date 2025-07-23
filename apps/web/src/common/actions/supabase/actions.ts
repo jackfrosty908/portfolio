@@ -16,6 +16,22 @@ export type SignupState = {
   serverError?: string;
 };
 
+export type ForgotPasswordState = {
+  errors?: {
+    email?: string[];
+  };
+  serverError?: string;
+  success?: string;
+};
+
+export type ResetPasswordState = {
+  errors?: {
+    password?: string[];
+    confirmPassword?: string[];
+  };
+  serverError?: string;
+};
+
 export async function login(prevState: unknown, formData: FormData) {
   const supabase = await createClient();
 
@@ -81,5 +97,89 @@ export async function signup(prevState: SignupState, formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/signup/pending");
+}
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email({ message: "Invalid email address." }),
+});
+
+export async function forgotPassword(
+  prevState: ForgotPasswordState,
+  formData: FormData,
+) {
+  const supabase = await createClient();
+
+  const validatedFields = forgotPasswordSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { data: validatedData } = validatedFields;
+
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    validatedData.email,
+    {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`,
+    },
+  );
+
+  if (error) {
+    return {
+      serverError: "Failed to send reset email. Please try again.",
+    };
+  }
+
+  return {
+    success: "Check your email for a password reset link.",
+  };
+}
+
+const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export async function resetPassword(
+  prevState: ResetPasswordState,
+  formData: FormData,
+) {
+  const supabase = await createClient();
+
+  const validatedFields = resetPasswordSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { data: validatedData } = validatedFields;
+
+  const { error } = await supabase.auth.updateUser({
+    password: validatedData.password,
+  });
+
+  if (error) {
+    return {
+      serverError: "Failed to update password. Please try again.",
+    };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/login");
 }

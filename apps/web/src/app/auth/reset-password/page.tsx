@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,81 +15,75 @@ import {
 } from "@/client/features/common/components/ui/card";
 import { Form } from "@/client/features/common/components/ui/form";
 import {
-  type ForgotPasswordState,
-  forgotPassword,
+  type ResetPasswordState,
+  resetPassword,
 } from "@/common/actions/supabase/actions";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
-});
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const initialState: ForgotPasswordState = {};
+const initialState: ResetPasswordState = {};
 
-const ForgotPasswordPage = () => {
+const ResetPasswordPage = () => {
   const [state, formAction, pending] = useActionState(
-    forgotPassword,
+    resetPassword,
     initialState,
   );
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
     mode: "onChange",
   });
-
-  if (state?.success) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle>Check your email</CardTitle>
-            <CardDescription>{state.success}</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen w-full items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Reset your password</CardTitle>
-          <CardDescription>
-            Enter your email address and we'll send you a link to reset your
-            password.
-          </CardDescription>
+          <CardTitle>Set new password</CardTitle>
+          <CardDescription>Enter your new password below.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={formAction} className="flex flex-col gap-6">
+            <form action={formAction} className="flex flex-col gap-2">
               <FormInput
                 form={form}
                 state={state}
-                name="email"
-                label="Email"
-                placeholder="m@example.com"
-                type="email"
+                name="password"
+                label="New Password"
+                placeholder=""
+                type="password"
+              />
+              <FormInput
+                form={form}
+                state={state}
+                name="confirmPassword"
+                label="Confirm Password"
+                placeholder=""
+                type="password"
               />
 
               <div className="flex flex-col gap-3">
                 <Button disabled={pending} type="submit" className="w-full">
-                  {pending ? "Sending..." : "Send reset link"}
+                  {pending ? "Updating..." : "Update password"}
                 </Button>
                 {state?.serverError && (
                   <p className="text-red-500 text-sm">{state.serverError}</p>
                 )}
-              </div>
-
-              <div className="text-center text-sm">
-                Remember your password?{" "}
-                <Link href="/login" className="underline underline-offset-4">
-                  Back to login
-                </Link>
               </div>
             </form>
           </Form>
@@ -100,4 +93,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;

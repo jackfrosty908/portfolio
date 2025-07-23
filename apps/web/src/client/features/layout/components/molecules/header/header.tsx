@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/client/features/common/components/ui/button";
+import LogoutButton from "@/client/features/layout/components/atoms/logout-button/LogoutButton";
 import { ModeToggle } from "@/features/layout/components/molecules/mode-toggle/mode-toggle";
 import { createClient } from "@/server/utils/supabase-server";
 
@@ -32,9 +32,12 @@ export default async function Header() {
 
         <div className="flex items-center gap-2">
           {user ? (
-            <Button variant="outline" onClick={() => supabase.auth.signOut()}>
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <p className="text-muted-foreground text-sm">
+                Hello, {user.user_metadata.first_name}
+              </p>
+              <LogoutButton />
+            </div>
           ) : null}
           <ModeToggle />
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,46 +15,54 @@ import {
   CardTitle,
 } from "@/client/features/common/components/ui/card";
 import { Form } from "@/client/features/common/components/ui/form";
-import { type SignupState, signup } from "@/common/actions/supabase/actions";
+import {
+  type ForgotPasswordState,
+  forgotPassword,
+} from "@/common/actions/supabase/actions";
 
 const formSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
-  lastName: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const initialState: SignupState = {};
+const initialState: ForgotPasswordState = {};
 
-const SignupFeature = () => {
-  const [state, formAction, pending] = useActionState(signup, initialState);
+const ForgotPasswordFeature = () => {
+  const [state, formAction, pending] = useActionState(
+    forgotPassword,
+    initialState,
+  );
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       email: "",
-      password: "",
     },
     mode: "onChange",
   });
 
+  if (state?.success) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>Check your email</CardTitle>
+            <CardDescription>{state.success}</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div className={"flex w-1/3 flex-col gap-6"}>
-      <Card>
+    <div className="flex h-screen w-full items-center justify-center p-4">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Create an account</CardTitle>
+          <CardTitle>Reset your password</CardTitle>
           <CardDescription>
-            Enter your information below to create your account
+            Enter your email address and we'll send you a link to reset your
+            password.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -62,47 +71,26 @@ const SignupFeature = () => {
               <FormInput
                 form={form}
                 state={state}
-                name="firstName"
-                label="First Name"
-                placeholder="John"
-              />
-              <FormInput
-                form={form}
-                state={state}
-                name="lastName"
-                label="Last Name"
-                placeholder="Doe"
-              />
-              <FormInput
-                form={form}
-                state={state}
                 name="email"
                 label="Email"
                 placeholder="m@example.com"
                 type="email"
               />
-              <FormInput
-                form={form}
-                state={state}
-                name="password"
-                label="Password"
-                placeholder=""
-                type="password"
-              />
 
               <div className="flex flex-col gap-3">
                 <Button disabled={pending} type="submit" className="w-full">
-                  {pending ? "Creating account..." : "Create account"}
+                  {pending ? "Sending..." : "Send reset link"}
                 </Button>
                 {state?.serverError && (
                   <p className="text-red-500 text-sm">{state.serverError}</p>
                 )}
               </div>
-              <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <a href="/login" className="underline underline-offset-4">
-                  Login
-                </a>
+
+              <div className="text-center text-sm">
+                Remember your password?{" "}
+                <Link href="/login" className="underline underline-offset-4">
+                  Back to login
+                </Link>
               </div>
             </form>
           </Form>
@@ -112,4 +100,4 @@ const SignupFeature = () => {
   );
 };
 
-export default SignupFeature;
+export default ForgotPasswordFeature;

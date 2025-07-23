@@ -7,24 +7,27 @@ import {
   FormMessage,
 } from "@/client/features/common/components/ui/form";
 import { Input } from "@/client/features/common/components/ui/input";
-import type { SignupState } from "@/common/actions/supabase/actions";
 
 interface FormInputProps {
   form: UseFormReturn<any>;
-  state: SignupState;
   name: string;
   label: string;
   placeholder: string;
   type?: string;
+  state?: {
+    errors?: Record<string, string[]>;
+  };
+  labelSuffix?: React.ReactNode;
 }
 
 const FormInput = ({
   form,
-  state,
   name,
   label,
   placeholder,
   type = "text",
+  state,
+  labelSuffix,
 }: FormInputProps) => {
   return (
     <FormField
@@ -32,15 +35,16 @@ const FormInput = ({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <div className="flex items-center">
+            <FormLabel>{label}</FormLabel>
+            {labelSuffix}
+          </div>
           <FormControl>
             <Input type={type} placeholder={placeholder} {...field} />
           </FormControl>
           <FormMessage />
-          {state?.errors?.[name as keyof SignupState["errors"]] && (
-            <p className="text-red-500 text-sm">
-              {state.errors[name as keyof SignupState["errors"]]?.[0]}
-            </p>
+          {state?.errors?.[name] && (
+            <p className="text-red-500 text-sm">{state.errors[name]?.[0]}</p>
           )}
         </FormItem>
       )}
