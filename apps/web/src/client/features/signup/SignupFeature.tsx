@@ -1,6 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useActionState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/client/features/common/components/ui/button";
 import {
   Card,
@@ -9,17 +12,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/client/features/common/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/client/features/common/components/ui/form";
 import { Input } from "@/client/features/common/components/ui/input";
-import { Label } from "@/client/features/common/components/ui/label";
+import { type SignupState, signup } from "@/common/actions/supabase/actions";
 
-import { signup } from "@/common/actions/supabase/actions";
+const formSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  lastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  email: z.string().email({ message: "Invalid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+});
 
-const initialState = {
-  error: "",
-};
+type FormValues = z.infer<typeof formSchema>;
+
+const initialState: SignupState = {};
 
 const SignupFeature = () => {
   const [state, formAction, pending] = useActionState(signup, initialState);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
   return (
     <div className={"flex w-1/3 flex-col gap-6"}>
@@ -31,56 +64,101 @@ const SignupFeature = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={formAction}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="first_name">First Name</Label>
-                <Input
-                  id="first_name"
-                  name="first_name"
-                  placeholder="John"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="last_name">Last Name</Label>
-                <Input
-                  id="last_name"
-                  name="last_name"
-                  placeholder="Doe"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" required />
-              </div>
+          <Form {...form}>
+            <form action={formAction} className="flex flex-col gap-6">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    {state?.errors?.firstName && (
+                      <p className="text-red-500 text-sm">
+                        {state.errors.firstName[0]}
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    {state?.errors?.lastName && (
+                      <p className="text-red-500 text-sm">
+                        {state.errors.lastName[0]}
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="m@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    {state?.errors?.email && (
+                      <p className="text-red-500 text-sm">
+                        {state.errors.email[0]}
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    {state?.errors?.password && (
+                      <p className="text-red-500 text-sm">
+                        {state.errors.password[0]}
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+
               <div className="flex flex-col gap-3">
                 <Button disabled={pending} type="submit" className="w-full">
-                  Create account
+                  {pending ? "Creating account..." : "Create account"}
                 </Button>
-                {state?.error && (
-                  <p className="text-red-500 text-sm">{state.error}</p>
+                {state?.serverError && (
+                  <p className="text-red-500 text-sm">{state.serverError}</p>
                 )}
               </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <a href="/login" className="underline underline-offset-4">
-                Login
-              </a>
-            </div>
-          </form>
+              <div className="mt-4 text-center text-sm">
+                Already have an account?{" "}
+                <a href="/login" className="underline underline-offset-4">
+                  Login
+                </a>
+              </div>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

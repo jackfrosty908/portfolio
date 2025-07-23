@@ -2,8 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 import { createClient } from "@/server/utils/supabase-server";
+
+export type SignupState = {
+  errors?: {
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    password?: string[];
+  };
+  serverError?: string;
+};
 
 export async function login(prevState: unknown, formData: FormData) {
   const supabase = await createClient();
@@ -24,32 +35,49 @@ export async function login(prevState: unknown, formData: FormData) {
   redirect("/");
 }
 
-export async function signup(prevState: unknown, formData: FormData) {
+const signupSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  lastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  email: z.email({ message: "Invalid email address." }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+});
+
+export async function signup(prevState: SignupState, formData: FormData) {
   const supabase = await createClient();
 
-  //TODO: @JF Validate inputs
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+  const validatedFields = signupSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { data: validatedData } = validatedFields;
+
+  const { error } = await supabase.auth.signUp({
+    email: validatedData.email,
+    password: validatedData.password,
     options: {
       data: {
-        first_name: formData.get("first_name") as string,
-        last_name: formData.get("last_name") as string,
+        first_name: validatedData.firstName,
+        last_name: validatedData.lastName,
       },
     },
-  };
-
-  const { error } = await supabase.auth.signUp(data);
+  });
 
   if (error) {
-    switch (error.code) {
-      case "weak_password":
-        return { error: "Password is too weak" };
-      case "email_exists":
-        return { error: "Email already exists" };
-      default:
-        return { error: "Something went wrong" };
-    }
+    return {
+      serverError: error.message,
+    };
   }
 
   revalidatePath("/", "layout");
