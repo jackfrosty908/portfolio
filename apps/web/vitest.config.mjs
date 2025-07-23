@@ -25,6 +25,7 @@ export default defineConfig({
         '**/vitest.config.*',
         '**/tsconfig.json',
         '**/components.json',
+        '**/middleware.ts',
 
         // Build output and dependencies
         'node_modules/**',
