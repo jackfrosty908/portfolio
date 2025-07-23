@@ -1,11 +1,10 @@
-"use client";
 import Link from "next/link";
-import { Button } from "@/client/components/ui/button";
-import { createClient } from "@/client/utils/supabase-client";
+import { Button } from "@/client/features/common/components/ui/button";
 import { ModeToggle } from "@/features/layout/components/molecules/mode-toggle/mode-toggle";
+import { createClient } from "@/server/utils/supabase-server";
 
 export default async function Header() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

@@ -30,7 +30,7 @@ import {
   CardDescription as MockCardDescription,
   CardHeader as MockCardHeader,
   CardTitle as MockCardTitle,
-} from "@/client/components/ui/card";
+} from "@/client/features/common/components/ui/card";
 import IconCard from "./icon-card";
 
 describe("IconCard", () => {

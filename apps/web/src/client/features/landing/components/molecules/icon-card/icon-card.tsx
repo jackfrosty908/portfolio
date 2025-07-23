@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/client/components/ui/card";
+} from "@/client/features/common/components/ui/card";
 
 interface IconCardProps {
   title: string;
