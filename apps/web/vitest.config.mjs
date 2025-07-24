@@ -48,7 +48,7 @@ export default defineConfig({
         '**/index.js',
 
         // Shadcn/ui components - default components, won't be tested until they are changed
-        '**/src/client/components/ui/**',
+        '**/src/client/features/common/components/ui/**',
 
         // TRPC and API setup - configuration code
         '**/src/client/utils/trpc.ts',
