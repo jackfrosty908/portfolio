@@ -35,7 +35,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const initialState: ResetPasswordState = {};
 
-const ResetPasswordPage = () => {
+const ResetPasswordFeature = () => {
   const [state, formAction, pending] = useActionState(
     resetPassword,
     initialState,
@@ -93,4 +93,4 @@ const ResetPasswordPage = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default ResetPasswordFeature;
