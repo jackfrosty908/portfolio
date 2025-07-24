@@ -21,7 +21,7 @@ import {
 } from "@/common/actions/supabase/actions";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
+  email: z.email({ message: "Invalid email address." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;

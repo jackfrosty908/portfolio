@@ -1,11 +1,11 @@
-import LoginFeature from "@/client/features/login/LoginFeature"
+import LoginFeature from "@/client/features/login/LoginFeature";
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex h-screen flex-col items-center justify-center">
       <LoginFeature />
     </div>
-  )
-}
+  );
+};
 
 export default LoginPage;
