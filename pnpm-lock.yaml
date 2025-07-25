@@ -145,6 +145,9 @@ importers:
         specifier: ^4.0.5
         version: 4.0.5
     devDependencies:
+      '@biomejs/biome':
+        specifier: 2.1.2
+        version: 2.1.2
       '@tailwindcss/postcss':
         specifier: ^4.1.10
         version: 4.1.11
@@ -187,6 +190,9 @@ importers:
       typescript:
         specifier: ^5
         version: 5.8.3
+      ultracite:
+        specifier: 5.0.49
+        version: 5.0.49(@types/node@20.19.9)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(tsx@4.20.3)
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@7.0.5(@types/node@20.19.9)(jiti@2.4.2)(lightningcss@1.30.1)(tsx@4.20.3))
@@ -353,6 +359,12 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@clack/core@0.5.0':
+    resolution: {integrity: sha512-p3y0FIOwaYRUPRcMO7+dlmLh8PSRcrjuTndsiA0WAFbWES0mLZlrjVoBRZ9DzkPFJZG6KGkJmoEAY0ZcVWTkow==}
+
+  '@clack/prompts@0.11.0':
+    resolution: {integrity: sha512-pMN5FcrEw9hUkZA4f+zLlzivQSeQf5dRGJjSUbvVYDLvpKCdQx5OaknvKzgbtXOizhP+SJJJjqEbOe55uKKfAw==}
 
   '@cloudflare/kv-asset-handler@0.4.0':
     resolution: {integrity: sha512-+tv3z+SPp+gqTIcImN9o0hqE9xyfQjI1XD9pL6NuKjua9B1y7mNYv0S9cP+QEbA4ppVgGZEmKOvHX5G5Ei1CVA==}
@@ -2575,6 +2587,10 @@ packages:
     resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
     engines: {node: '>=12.5.0'}
 
+  commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
@@ -2618,6 +2634,10 @@ packages:
   deep-eql@5.0.2:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
+
+  deepmerge@4.3.1:
+    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
+    engines: {node: '>=0.10.0'}
 
   defu@6.1.4:
     resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
@@ -2963,6 +2983,9 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
+
+  jsonc-parser@3.3.1:
+    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
 
   kleur@4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
@@ -3390,6 +3413,9 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
+  sisteransi@1.0.5:
+    resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
+
   sonner@2.0.6:
     resolution: {integrity: sha512-yHFhk8T/DK3YxjFQXIrcHT1rGEeTLliVzWbO0xN8GberVun2RiBnxAjXAYpZrqwEVHBG9asI/Li8TAAhN9m59Q==}
     peerDependencies:
@@ -3617,6 +3643,10 @@ packages:
 
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
+
+  ultracite@5.0.49:
+    resolution: {integrity: sha512-HxhCzrkFUiEa87Wfwu1ac2WgtYsTApMw95hueulToDwLhPpRaByWmztfHfy2eyqJaaZ3XgRC69tGqtA6xcDlPA==}
+    hasBin: true
 
   unconfig@7.3.2:
     resolution: {integrity: sha512-nqG5NNL2wFVGZ0NA/aCFw0oJ2pxSf1lwg4Z5ill8wd7K4KX/rQbHlwbh+bjctXL5Ly1xtzHenHGOK0b+lG6JVg==}
@@ -4025,6 +4055,17 @@ snapshots:
 
   '@biomejs/cli-win32-x64@2.1.2':
     optional: true
+
+  '@clack/core@0.5.0':
+    dependencies:
+      picocolors: 1.1.1
+      sisteransi: 1.0.5
+
+  '@clack/prompts@0.11.0':
+    dependencies:
+      '@clack/core': 0.5.0
+      picocolors: 1.1.1
+      sisteransi: 1.0.5
 
   '@cloudflare/kv-asset-handler@0.4.0':
     dependencies:
@@ -5945,6 +5986,8 @@ snapshots:
       color-convert: 2.0.1
       color-string: 1.9.1
 
+  commander@14.0.0: {}
+
   convert-source-map@2.0.0: {}
 
   cookie@1.0.2: {}
@@ -5978,6 +6021,8 @@ snapshots:
   decode-formdata@0.9.0: {}
 
   deep-eql@5.0.2: {}
+
+  deepmerge@4.3.1: {}
 
   defu@6.1.4: {}
 
@@ -6277,6 +6322,8 @@ snapshots:
   jsesc@3.1.0: {}
 
   json5@2.2.3: {}
+
+  jsonc-parser@3.3.1: {}
 
   kleur@4.1.5: {}
 
@@ -6784,6 +6831,8 @@ snapshots:
     dependencies:
       is-arrayish: 0.3.2
 
+  sisteransi@1.0.5: {}
+
   sonner@2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -6973,6 +7022,34 @@ snapshots:
   typescript@5.8.3: {}
 
   ufo@1.6.1: {}
+
+  ultracite@5.0.49(@types/node@20.19.9)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(tsx@4.20.3):
+    dependencies:
+      '@clack/prompts': 0.11.0
+      commander: 14.0.0
+      deepmerge: 4.3.1
+      jsonc-parser: 3.3.1
+      vitest: 3.2.4(@types/node@20.19.9)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(tsx@4.20.3)
+    transitivePeerDependencies:
+      - '@edge-runtime/vm'
+      - '@types/debug'
+      - '@types/node'
+      - '@vitest/browser'
+      - '@vitest/ui'
+      - happy-dom
+      - jiti
+      - jsdom
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
 
   unconfig@7.3.2:
     dependencies:
