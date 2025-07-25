@@ -1,16 +1,12 @@
 import {
   BookOpen,
   BriefcaseBusiness,
-  Calendar,
   CheckCircle,
   Code,
   Database,
   Palette,
 } from 'lucide-react';
-import {
-  Alert,
-  AlertDescription,
-} from '@/client/features/common/components/ui/alert';
+
 import {
   Card,
   CardContent,
