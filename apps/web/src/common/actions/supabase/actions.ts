@@ -32,14 +32,25 @@ export type ResetPasswordState = {
   serverError?: string;
 };
 
+export const loginSchema = z.object({
+  email: z.email({ message: "Invalid email address." }),
+  password: z.string().min(1, { message: "Password is required." }),
+});
+
 export async function login(prevState: unknown, formData: FormData) {
   const supabase = await createClient();
 
-  //TODO: @JF Validate inputs
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+  const validatedFields = loginSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { data } = validatedFields;
 
   const { error } = await supabase.auth.signInWithPassword(data);
 

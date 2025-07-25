@@ -1,13 +1,17 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { z } from "zod";
 import LoginFeature from "./LoginFeature";
 
-// Mock the login action
 vi.mock("@/common/actions/supabase/actions", () => ({
   login: vi.fn(),
+  // This has to be done here otherwise there are issues importing from a server action file
+  loginSchema: z.object({
+    email: z.string().email({ message: "Invalid email address." }),
+    password: z.string().min(1, { message: "Password is required." }),
+  }),
 }));
 
-// Mock the FormInput component to be simpler and focus on the test
 vi.mock("@/client/features/common/components/atoms/FormInput", () => ({
   default: vi.fn(({ name, label, placeholder, type, form, labelSuffix }) => (
     <div>

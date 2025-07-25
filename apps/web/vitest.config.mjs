@@ -62,6 +62,11 @@ export default defineConfig({
         // Documentation
         '**/*.md',
 
+        //supabase wrappers
+        '**/src/client/utils/supabase-client.ts',
+        '**/src/server/utils/supabase-server.ts',
+        '**/src/middleware/supabase-middleware.ts',
+
         // Misc
         '**/.gitignore',
         '**/README*',
