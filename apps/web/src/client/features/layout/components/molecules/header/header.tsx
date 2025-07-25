@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import LogoutButton from '@/client/features/layout/components/atoms/logout-button/LogoutButton';
+import LogoutButton from '@/client/features/layout/components/atoms/logout-button/logout-button';
 import { ModeToggle } from '@/features/layout/components/molecules/mode-toggle/mode-toggle';
 import { createClient } from '@/server/utils/supabase-server';
 
