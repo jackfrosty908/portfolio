@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
     coverage: {
       reporter: ['text', 'json', 'html', 'json-summary'],
       thresholds: {
@@ -24,6 +25,7 @@ export default defineConfig({
         '**/vitest.config.*',
         '**/tsconfig.json',
         '**/components.json',
+        '**/middleware.ts',
 
         // Build output and dependencies
         'node_modules/**',
@@ -46,7 +48,7 @@ export default defineConfig({
         '**/index.js',
 
         // Shadcn/ui components - default components, won't be tested until they are changed
-        '**/src/client/components/ui/**',
+        '**/src/client/features/common/components/ui/**',
 
         // TRPC and API setup - configuration code
         '**/src/client/utils/trpc.ts',
@@ -59,6 +61,11 @@ export default defineConfig({
 
         // Documentation
         '**/*.md',
+
+        //supabase wrappers
+        '**/src/client/utils/supabase-client.ts',
+        '**/src/server/utils/supabase-server.ts',
+        '**/src/middleware/supabase-middleware.ts',
 
         // Misc
         '**/.gitignore',

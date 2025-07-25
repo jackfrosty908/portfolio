@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import HealthCheck from './HealthCheck';
+import HealthCheck from './health-check';
 
 const mockUseQuery = vi.fn();
 

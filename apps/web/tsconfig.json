@@ -20,8 +20,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"]
-    }
+      "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"],
+      "@/middleware/*": ["./src/middleware/*"]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "./**/*.ts",
