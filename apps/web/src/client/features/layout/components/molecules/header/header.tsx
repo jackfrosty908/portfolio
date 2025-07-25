@@ -17,6 +17,17 @@ export default async function Header() {
     { to: '/forgot-password', label: 'Forgot Password' },
   ];
 
+  const socialLinks = [
+    {
+      href: 'https://github.com/jackfrosty908',
+      label: 'GitHub',
+    },
+    {
+      href: 'https://www.linkedin.com/in/jack-foster-dev/',
+      label: 'LinkedIn',
+    },
+  ];
+
   return (
     <div>
       <div className="flex flex-row items-center justify-between px-2 py-1">
@@ -39,6 +50,22 @@ export default async function Header() {
               <LogoutButton />
             </div>
           ) : null}
+
+          {/* Social Links */}
+          <div className="flex items-center gap-1">
+            {socialLinks.map(({ href, label }) => (
+              <Link
+                className="rounded-md px-3 py-1 text-muted-foreground text-sm transition-colors hover:bg-accent hover:text-foreground"
+                href={href}
+                key={href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
           <ModeToggle />
         </div>
       </div>
