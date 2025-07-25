@@ -7,5 +7,8 @@
         "noUnknownAtRule": "off"
       }
     }
+  },
+  "files": {
+    "includes": ["**", "!apps/web/src/client/features/common/components/ui/**"]
   }
 }

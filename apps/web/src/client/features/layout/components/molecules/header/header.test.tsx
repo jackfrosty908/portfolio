@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/performance/useTopLevelRegex: test mocks */
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Header from './header';
@@ -16,7 +17,7 @@ vi.mock('@/server/utils/supabase-server', () => ({
 
 // Mock LogoutButton component
 vi.mock(
-  '@/client/features/layout/components/atoms/logout-button/LogoutButton',
+  '@/client/features/layout/components/atoms/logout-button/logout-button',
   () => ({
     default: () => (
       <button data-testid="logout-button" type="button">
@@ -68,7 +69,7 @@ describe('Header', () => {
             data: { user: null },
           }),
         },
-      } as any);
+      } as { auth: { getUser: ReturnType<typeof vi.fn> } });
     });
 
     it('renders navigation links', async () => {
@@ -141,7 +142,7 @@ describe('Header', () => {
             data: { user: mockUser },
           }),
         },
-      } as any);
+      } as { auth: { getUser: ReturnType<typeof vi.fn> } });
     });
 
     it('renders user greeting with first name', async () => {
@@ -186,7 +187,7 @@ describe('Header', () => {
             data: { user: null },
           }),
         },
-      } as any);
+      } as { auth: { getUser: ReturnType<typeof vi.fn> } });
     });
 
     it('has correct container structure', async () => {
@@ -216,7 +217,7 @@ describe('Header', () => {
         auth: {
           getUser: mockGetUser,
         },
-      } as any);
+      } as { auth: { getUser: ReturnType<typeof vi.fn> } });
 
       await Header();
 

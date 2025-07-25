@@ -1,4 +1,4 @@
-import SignupFeature from '@/client/features/signup/SignupFeature';
+import SignupFeature from '@/client/features/signup/signup-feature';
 
 const SignupPage = () => {
   return (

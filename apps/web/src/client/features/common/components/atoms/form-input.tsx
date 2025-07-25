@@ -9,6 +9,7 @@ import {
 import { Input } from '@/client/features/common/components/ui/input';
 
 interface FormInputProps {
+  // biome-ignore lint/suspicious/noExplicitAny: form is a generic type
   form: UseFormReturn<any>;
   name: string;
   label: string;

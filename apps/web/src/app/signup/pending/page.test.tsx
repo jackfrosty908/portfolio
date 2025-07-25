@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import PendingPage from './page';
 
-vi.mock('@/client/features/signup/PendingFeature', () => ({
+vi.mock('@/client/features/signup/pending-feature', () => ({
   default: vi.fn(() => (
     <div data-testid="pending-feature">Pending Feature</div>
   )),

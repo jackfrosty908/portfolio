@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import LoginFeature from './LoginFeature';
+import LoginFeature from './login-feature';
 
 vi.mock('@/common/actions/supabase/actions', () => ({
   login: vi.fn(),
@@ -12,7 +12,7 @@ vi.mock('@/common/actions/supabase/actions', () => ({
   }),
 }));
 
-vi.mock('@/client/features/common/components/atoms/FormInput', () => ({
+vi.mock('@/client/features/common/components/atoms/form-input', () => ({
   default: vi.fn(({ name, label, placeholder, type, _, labelSuffix }) => (
     <div>
       <label htmlFor={name}>{label}</label>

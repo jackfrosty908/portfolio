@@ -1,4 +1,4 @@
-import HealthCheck from '@/features/layout/components/atoms/health-check/HealthCheck';
+import HealthCheck from '@/client/features/layout/components/atoms/health-check/health-check';
 
 export default function Status() {
   return (

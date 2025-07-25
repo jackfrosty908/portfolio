@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import FormInput from '@/client/features/common/components/atoms/FormInput';
+import FormInput from '@/client/features/common/components/atoms/form-input';
 import { Button } from '@/client/features/common/components/ui/button';
 import {
   Card,
@@ -17,6 +17,7 @@ import { Form } from '@/client/features/common/components/ui/form';
 import { cn } from '@/client/lib/utils';
 import { login } from '@/common/actions/supabase/actions';
 import { loginSchema } from '@/common/actions/supabase/schema';
+import { logger } from '@/common/utils/logger/logger';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -48,6 +49,7 @@ const LoginFeature = () => {
         setServerError(result.error);
       }
     } catch (error) {
+      logger.error('Login failed:', error);
       setServerError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);

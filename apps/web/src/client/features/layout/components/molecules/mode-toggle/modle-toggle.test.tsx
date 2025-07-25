@@ -1,3 +1,5 @@
+import type { VariantProps } from 'class-variance-authority';
+import type { ComponentProps } from 'react';
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ModeToggle } from './mode-toggle';
@@ -10,8 +12,31 @@ vi.mock('next-themes', () => ({
   }),
 }));
 
-vi.mock('@/client/components/ui/button', () => ({
-  Button: ({ children, variant, size, ...props }: any) =>
+type ButtonProps = ComponentProps<'button'> &
+  VariantProps<
+    typeof import('@/client/features/common/components/ui/button').buttonVariants
+  > & {
+    asChild?: boolean;
+  };
+
+type DropdownMenuProps = ComponentProps<
+  typeof import('@/client/features/common/components/ui/dropdown-menu').DropdownMenu
+>;
+type DropdownMenuTriggerProps = ComponentProps<
+  typeof import('@/client/features/common/components/ui/dropdown-menu').DropdownMenuTrigger
+>;
+type DropdownMenuContentProps = ComponentProps<
+  typeof import('@/client/features/common/components/ui/dropdown-menu').DropdownMenuContent
+>;
+type DropdownMenuItemProps = ComponentProps<
+  typeof import('@/client/features/common/components/ui/dropdown-menu').DropdownMenuItem
+> & {
+  inset?: boolean;
+  variant?: 'default' | 'destructive';
+};
+
+vi.mock('@/client/features/common/components/ui/button', () => ({
+  Button: ({ children, variant, size, ...props }: ButtonProps) =>
     createElement(
       'button',
       { 'data-testid': 'theme-toggle-button', type: 'button', ...props },
@@ -19,14 +44,14 @@ vi.mock('@/client/components/ui/button', () => ({
     ),
 }));
 
-vi.mock('@/client/components/ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children }: any) =>
+vi.mock('@/client/features/common/components/ui/dropdown-menu', () => ({
+  DropdownMenu: ({ children }: DropdownMenuProps) =>
     createElement('div', { 'data-testid': 'dropdown-menu' }, children),
-  DropdownMenuTrigger: ({ children }: any) =>
+  DropdownMenuTrigger: ({ children }: DropdownMenuTriggerProps) =>
     createElement('div', { 'data-testid': 'dropdown-trigger' }, children),
-  DropdownMenuContent: ({ children }: any) =>
+  DropdownMenuContent: ({ children }: DropdownMenuContentProps) =>
     createElement('div', { 'data-testid': 'dropdown-content' }, children),
-  DropdownMenuItem: ({ children, onClick }: any) =>
+  DropdownMenuItem: ({ children, onClick }: DropdownMenuItemProps) =>
     createElement(
       'div',
       {

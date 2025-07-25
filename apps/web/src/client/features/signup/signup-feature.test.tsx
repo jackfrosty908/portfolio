@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/suspicious/noEmptyBlockStatements: test mocks */
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, type Mock, vi } from 'vitest';
-import SignupFeature from './SignupFeature';
+import SignupFeature from './signup-feature';
 
 // Mock the signup action
 vi.mock('@/common/actions/supabase/actions', () => ({
@@ -9,8 +10,8 @@ vi.mock('@/common/actions/supabase/actions', () => ({
 }));
 
 // Mock the FormInput component to be simpler and focus on the test
-vi.mock('@/client/features/common/components/atoms/FormInput', () => ({
-  default: vi.fn(({ name, label, placeholder, type, form, state }) => (
+vi.mock('@/client/features/common/components/atoms/form-input', () => ({
+  default: vi.fn(({ name, label, placeholder, type }) => (
     <div>
       <label htmlFor={name}>{label}</label>
       <input

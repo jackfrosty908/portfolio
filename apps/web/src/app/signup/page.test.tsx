@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import SignupPage from './page';
 
 // Mock the SignupFeature component
-vi.mock('@/client/features/signup/SignupFeature', () => ({
+vi.mock('@/client/features/signup/signup-feature', () => ({
   default: vi.fn(() => <div data-testid="signup-feature">Signup Feature</div>),
 }));
 

@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/suspicious/noEmptyBlockStatements: test mocks */
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, type Mock, vi } from 'vitest';
-import ResetPasswordFeature from './ResetPasswordFeature';
+import ResetPasswordFeature from './reset-password-feature';
 
 vi.mock('@/common/actions/supabase/actions', () => ({
   resetPassword: vi.fn(),

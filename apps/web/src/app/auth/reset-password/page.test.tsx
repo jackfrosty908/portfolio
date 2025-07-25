@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import ResetPasswordPage from './page';
 
-vi.mock('@/client/features/reset-password/ResetPasswordFeature', () => ({
+vi.mock('@/client/features/reset-password/reset-password-feature', () => ({
   default: vi.fn(() => (
     <div data-testid="reset-password-feature">Reset Password Feature</div>
   )),

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import LoginPage from './page';
 
-vi.mock('@/client/features/login/LoginFeature', () => ({
+vi.mock('@/client/features/login/login-feature', () => ({
   default: vi.fn(() => <div data-testid="login-feature">Login Feature</div>),
 }));
 

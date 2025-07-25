@@ -40,7 +40,7 @@ vi.mock(
 import { BookOpen, BriefcaseBusiness, Calendar, Code } from 'lucide-react';
 import Hero from '@/client/features/landing/components/molecules/hero/hero';
 import IconCard from '@/client/features/landing/components/molecules/icon-card/icon-card';
-import LandingFeature from './LandingFeature';
+import LandingFeature from './landing-feature';
 
 const MockBookOpen = BookOpen;
 const MockBriefcaseBusiness = BriefcaseBusiness;
@@ -282,7 +282,9 @@ describe('LandingFeature', () => {
     // Get icons from main section
     const whatSection = sections[1];
     const grid = whatSection.props.children[1];
-    const mainIcons = grid.props.children.map((card: any) => card.props.icon);
+    const mainIcons = grid.props.children.map(
+      (card: { props: { icon: unknown } }) => card.props.icon
+    );
 
     // Get icon from coming soon section
     const comingSoonSection = sections[2];

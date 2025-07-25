@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/performance/useTopLevelRegex: test mocks */
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import EditorPage from './page';
@@ -86,7 +87,7 @@ describe('EditorPage', () => {
     it('does not render the page content', async () => {
       try {
         await EditorPage();
-      } catch (e) {
+      } catch (_) {
         // Expected redirect error
       }
       expect(screen.queryByText(/Hello/)).not.toBeInTheDocument();

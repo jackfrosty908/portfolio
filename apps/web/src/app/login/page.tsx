@@ -1,4 +1,4 @@
-import LoginFeature from '@/client/features/login/LoginFeature';
+import LoginFeature from '@/client/features/login/login-feature';
 
 const LoginPage = () => {
   return (

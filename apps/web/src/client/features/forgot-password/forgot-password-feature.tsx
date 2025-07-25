@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import FormInput from '@/client/features/common/components/atoms/FormInput';
+import FormInput from '@/client/features/common/components/atoms/form-input';
 import { Button } from '@/client/features/common/components/ui/button';
 import {
   Card,

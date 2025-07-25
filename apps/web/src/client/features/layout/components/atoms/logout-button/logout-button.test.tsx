@@ -6,7 +6,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import LogoutButton from './LogoutButton';
+import LogoutButton from './logout-button';
 
 // Hoist mocks
 const { mockPush, mockRefresh, mockCreateClient } = vi.hoisted(() => ({
@@ -56,12 +56,6 @@ vi.mock('@/client/features/common/components/ui/button', () => ({
   ),
 }));
 
-// Mock console to avoid test output pollution
-const mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
-const mockConsoleError = vi
-  .spyOn(console, 'error')
-  .mockImplementation(() => {});
-
 describe('LogoutButton', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -109,8 +103,8 @@ describe('LogoutButton', () => {
     });
 
     it('shows loading state during logout', async () => {
-      let resolveSignOut: (value: any) => void;
-      const signOutPromise = new Promise((resolve) => {
+      let resolveSignOut: ((value: { error: null }) => void) | undefined;
+      const signOutPromise = new Promise<{ error: null }>((resolve) => {
         resolveSignOut = resolve;
       });
       mockSignOut.mockReturnValue(signOutPromise);
@@ -127,7 +121,7 @@ describe('LogoutButton', () => {
         expect(screen.getByRole('button')).toBeDisabled();
       });
 
-      resolveSignOut!({ error: null });
+      resolveSignOut?.({ error: null });
 
       await waitFor(() => {
         expect(
