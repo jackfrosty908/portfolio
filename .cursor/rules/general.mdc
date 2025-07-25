@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+### Testing Best Practices  
+- Don't test CSS classes, DOM structure, or styling details in unit tests.
+- Test user-visible behavior and content, not implementation details.
+- Write tests that survive refactoring without breaking functionality.
