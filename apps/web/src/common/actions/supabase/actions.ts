@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { loginSchema } from "@/common/actions/supabase/schema";
 
 import { createClient } from "@/server/utils/supabase-server";
 
@@ -31,11 +32,6 @@ export type ResetPasswordState = {
 	};
 	serverError?: string;
 };
-
-export const loginSchema = z.object({
-	email: z.email({ message: "Invalid email address." }),
-	password: z.string().min(1, { message: "Password is required." }),
-});
 
 export async function login(prevState: unknown, formData: FormData) {
 	const supabase = await createClient();

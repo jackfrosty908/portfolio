@@ -8,13 +8,8 @@ import {
 	type MockedFunction,
 	vi,
 } from "vitest";
-import {
-	forgotPassword,
-	login,
-	loginSchema,
-	resetPassword,
-	signup,
-} from "./actions";
+import { loginSchema } from "@/common/actions/supabase/schema";
+import { forgotPassword, login, resetPassword, signup } from "./actions";
 
 // Mock Next.js functions
 vi.mock("next/cache", () => ({

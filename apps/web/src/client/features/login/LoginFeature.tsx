@@ -15,7 +15,8 @@ import {
 } from "@/client/features/common/components/ui/card";
 import { Form } from "@/client/features/common/components/ui/form";
 import { cn } from "@/client/lib/utils";
-import { login, loginSchema } from "@/common/actions/supabase/actions";
+import { login } from "@/common/actions/supabase/actions";
+import { loginSchema } from "@/common/actions/supabase/schema";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
