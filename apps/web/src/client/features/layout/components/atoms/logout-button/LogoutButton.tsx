@@ -1,8 +1,8 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Button } from "@/client/features/common/components/ui/button";
-import { createClient } from "@/client/utils/supabase-client";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Button } from '@/client/features/common/components/ui/button';
+import { createClient } from '@/client/utils/supabase-client';
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -14,18 +14,18 @@ export default function LogoutButton() {
       const supabase = await createClient();
       const result = await supabase.auth.signOut();
       console.log(result);
-      router.push("/");
+      router.push('/');
       router.refresh();
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Button variant="outline" onClick={handleLogout} disabled={isLoading}>
-      {isLoading ? "Logging out..." : "Logout"}
+    <Button disabled={isLoading} onClick={handleLogout} variant="outline">
+      {isLoading ? 'Logging out...' : 'Logout'}
     </Button>
   );
 }

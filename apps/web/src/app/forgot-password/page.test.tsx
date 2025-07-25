@@ -1,29 +1,29 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import ForgotPasswordPage from "./page";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import ForgotPasswordPage from './page';
 
-vi.mock("@/client/features/forgot-password/ForgotPassword", () => ({
+vi.mock('@/client/features/forgot-password/ForgotPassword', () => ({
   default: vi.fn(() => (
     <div data-testid="forgot-password-feature">Forgot Password Feature</div>
   )),
 }));
 
-describe("ForgotPasswordPage", () => {
-  it("should render the ForgotPasswordFeature component", () => {
+describe('ForgotPasswordPage', () => {
+  it('should render the ForgotPasswordFeature component', () => {
     render(<ForgotPasswordPage />);
 
-    expect(screen.getByTestId("forgot-password-feature")).toBeInTheDocument();
+    expect(screen.getByTestId('forgot-password-feature')).toBeInTheDocument();
   });
 
-  it("should display the forgot password feature content", () => {
+  it('should display the forgot password feature content', () => {
     render(<ForgotPasswordPage />);
 
-    const elements = screen.getAllByTestId("forgot-password-feature");
+    const elements = screen.getAllByTestId('forgot-password-feature');
     expect(elements.length).toBeGreaterThan(0);
-    expect(elements[0]).toHaveTextContent("Forgot Password Feature");
+    expect(elements[0]).toHaveTextContent('Forgot Password Feature');
   });
 
-  it("should render without crashing", () => {
+  it('should render without crashing', () => {
     expect(() => render(<ForgotPasswordPage />)).not.toThrow();
   });
 });

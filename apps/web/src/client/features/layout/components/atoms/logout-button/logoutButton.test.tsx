@@ -4,9 +4,9 @@ import {
   render,
   screen,
   waitFor,
-} from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import LogoutButton from "./LogoutButton";
+} from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import LogoutButton from './LogoutButton';
 
 // Hoist mocks
 const { mockPush, mockRefresh, mockCreateClient } = vi.hoisted(() => ({
@@ -16,7 +16,7 @@ const { mockPush, mockRefresh, mockCreateClient } = vi.hoisted(() => ({
 }));
 
 // Mock Next.js router
-vi.mock("next/navigation", () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
     refresh: mockRefresh,
@@ -24,12 +24,12 @@ vi.mock("next/navigation", () => ({
 }));
 
 // Mock Supabase client
-vi.mock("@/client/utils/supabase-client", () => ({
+vi.mock('@/client/utils/supabase-client', () => ({
   createClient: mockCreateClient,
 }));
 
 // Mock UI Button component
-vi.mock("@/client/features/common/components/ui/button", () => ({
+vi.mock('@/client/features/common/components/ui/button', () => ({
   Button: ({
     children,
     onClick,
@@ -44,11 +44,11 @@ vi.mock("@/client/features/common/components/ui/button", () => ({
     [key: string]: unknown;
   }) => (
     <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      data-variant={variant}
       data-testid="logout-button"
+      data-variant={variant}
+      disabled={disabled}
+      onClick={onClick}
+      type="button"
       {...props}
     >
       {children}
@@ -57,12 +57,12 @@ vi.mock("@/client/features/common/components/ui/button", () => ({
 }));
 
 // Mock console to avoid test output pollution
-const mockConsoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+const mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 const mockConsoleError = vi
-  .spyOn(console, "error")
+  .spyOn(console, 'error')
   .mockImplementation(() => {});
 
-describe("LogoutButton", () => {
+describe('LogoutButton', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -71,22 +71,22 @@ describe("LogoutButton", () => {
     cleanup();
   });
 
-  describe("initial render", () => {
-    it("renders logout button with correct text", () => {
+  describe('initial render', () => {
+    it('renders logout button with correct text', () => {
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
     });
 
-    it("renders with outline variant", () => {
+    it('renders with outline variant', () => {
       render(<LogoutButton />);
-      const button = screen.getByTestId("logout-button");
-      expect(button).toHaveAttribute("data-variant", "outline");
+      const button = screen.getByTestId('logout-button');
+      expect(button).toHaveAttribute('data-variant', 'outline');
     });
   });
 
-  describe("logout functionality", () => {
+  describe('logout functionality', () => {
     const mockSignOut = vi.fn();
 
     beforeEach(() => {
@@ -97,10 +97,10 @@ describe("LogoutButton", () => {
       });
     });
 
-    it("calls logout process when clicked", async () => {
+    it('calls logout process when clicked', async () => {
       mockSignOut.mockResolvedValue({ error: null });
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
       fireEvent.click(button);
       await waitFor(() => {
         expect(mockCreateClient).toHaveBeenCalledOnce();
@@ -108,7 +108,7 @@ describe("LogoutButton", () => {
       });
     });
 
-    it("shows loading state during logout", async () => {
+    it('shows loading state during logout', async () => {
       let resolveSignOut: (value: any) => void;
       const signOutPromise = new Promise((resolve) => {
         resolveSignOut = resolve;
@@ -116,79 +116,79 @@ describe("LogoutButton", () => {
       mockSignOut.mockReturnValue(signOutPromise);
 
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
 
       fireEvent.click(button);
 
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: "Logging out..." }),
+          screen.getByRole('button', { name: 'Logging out...' })
         ).toBeInTheDocument();
-        expect(screen.getByRole("button")).toBeDisabled();
+        expect(screen.getByRole('button')).toBeDisabled();
       });
 
       resolveSignOut!({ error: null });
 
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: "Logout" }),
+          screen.getByRole('button', { name: 'Logout' })
         ).toBeInTheDocument();
-        expect(screen.getByRole("button")).not.toBeDisabled();
+        expect(screen.getByRole('button')).not.toBeDisabled();
       });
     });
 
-    it("navigates to home page after successful logout", async () => {
+    it('navigates to home page after successful logout', async () => {
       mockSignOut.mockResolvedValue({ error: null });
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
       fireEvent.click(button);
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith("/");
+        expect(mockPush).toHaveBeenCalledWith('/');
         expect(mockRefresh).toHaveBeenCalledOnce();
       });
     });
   });
 
-  describe("error handling", () => {
-    it("handles Supabase client creation failure and resets state", async () => {
-      mockCreateClient.mockRejectedValue(new Error("Client creation failed"));
+  describe('error handling', () => {
+    it('handles Supabase client creation failure and resets state', async () => {
+      mockCreateClient.mockRejectedValue(new Error('Client creation failed'));
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
       fireEvent.click(button);
       await waitFor(() => {
         expect(
-          screen.getByRole("button", { name: "Logout" }),
+          screen.getByRole('button', { name: 'Logout' })
         ).toBeInTheDocument();
-        expect(screen.getByRole("button")).not.toBeDisabled();
+        expect(screen.getByRole('button')).not.toBeDisabled();
       });
     });
 
-    it("handles signOut failure and resets state", async () => {
+    it('handles signOut failure and resets state', async () => {
       const mockSignOut = vi
         .fn()
-        .mockRejectedValue(new Error("Sign out failed"));
+        .mockRejectedValue(new Error('Sign out failed'));
       mockCreateClient.mockResolvedValue({
         auth: {
           signOut: mockSignOut,
         },
       });
       render(<LogoutButton />);
-      const button = screen.getByRole("button", { name: "Logout" });
+      const button = screen.getByRole('button', { name: 'Logout' });
       fireEvent.click(button);
       await waitFor(() => {
         expect(mockSignOut).toHaveBeenCalledOnce();
         expect(
-          screen.getByRole("button", { name: "Logout" }),
+          screen.getByRole('button', { name: 'Logout' })
         ).toBeInTheDocument();
-        expect(screen.getByRole("button")).not.toBeDisabled();
+        expect(screen.getByRole('button')).not.toBeDisabled();
       });
     });
   });
 
-  describe("accessibility", () => {
-    it("has proper button role", () => {
+  describe('accessibility', () => {
+    it('has proper button role', () => {
       render(<LogoutButton />);
-      const button = screen.getByRole("button");
+      const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
     });
   });

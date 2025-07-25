@@ -1,6 +1,6 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import EditorPage from "./page";
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import EditorPage from './page';
 
 // Hoist mocks
 const { mockCreateClient, mockRedirect } = vi.hoisted(() => ({
@@ -9,16 +9,16 @@ const { mockCreateClient, mockRedirect } = vi.hoisted(() => ({
 }));
 
 // Mock Supabase server client
-vi.mock("@/server/utils/supabase-server", () => ({
+vi.mock('@/server/utils/supabase-server', () => ({
   createClient: mockCreateClient,
 }));
 
 // Mock Next.js redirect
-vi.mock("next/navigation", () => ({
+vi.mock('next/navigation', () => ({
   redirect: mockRedirect,
 }));
 
-describe("EditorPage", () => {
+describe('EditorPage', () => {
   const mockGetUser = vi.fn();
 
   beforeEach(() => {
@@ -38,10 +38,10 @@ describe("EditorPage", () => {
     cleanup();
   });
 
-  describe("when user is authenticated", () => {
+  describe('when user is authenticated', () => {
     const mockUser = {
-      id: "123",
-      email: "test@example.com",
+      id: '123',
+      email: 'test@example.com',
     };
 
     beforeEach(() => {
@@ -51,26 +51,26 @@ describe("EditorPage", () => {
       });
     });
 
-    it("renders user email when authenticated", async () => {
+    it('renders user email when authenticated', async () => {
       render(await EditorPage());
       await waitFor(() => {
         expect(screen.getByText(`Hello ${mockUser.email}`)).toBeInTheDocument();
       });
     });
 
-    it("calls Supabase client to get user", async () => {
+    it('calls Supabase client to get user', async () => {
       await EditorPage();
       expect(mockCreateClient).toHaveBeenCalledOnce();
       expect(mockGetUser).toHaveBeenCalledOnce();
     });
 
-    it("does not redirect when authenticated", async () => {
+    it('does not redirect when authenticated', async () => {
       await EditorPage();
       expect(mockRedirect).not.toHaveBeenCalled();
     });
   });
 
-  describe("when user is not authenticated", () => {
+  describe('when user is not authenticated', () => {
     beforeEach(() => {
       mockGetUser.mockResolvedValue({
         data: { user: null },
@@ -78,12 +78,12 @@ describe("EditorPage", () => {
       });
     });
 
-    it("redirects to login page", async () => {
-      await expect(EditorPage()).rejects.toThrow("Redirect to: /login");
-      expect(mockRedirect).toHaveBeenCalledWith("/login");
+    it('redirects to login page', async () => {
+      await expect(EditorPage()).rejects.toThrow('Redirect to: /login');
+      expect(mockRedirect).toHaveBeenCalledWith('/login');
     });
 
-    it("does not render the page content", async () => {
+    it('does not render the page content', async () => {
       try {
         await EditorPage();
       } catch (e) {
@@ -93,8 +93,8 @@ describe("EditorPage", () => {
     });
   });
 
-  describe("when there is an authentication error", () => {
-    const mockError = new Error("Authentication failed");
+  describe('when there is an authentication error', () => {
+    const mockError = new Error('Authentication failed');
 
     beforeEach(() => {
       mockGetUser.mockResolvedValue({
@@ -103,25 +103,25 @@ describe("EditorPage", () => {
       });
     });
 
-    it("redirects to login page on error", async () => {
-      await expect(EditorPage()).rejects.toThrow("Redirect to: /login");
-      expect(mockRedirect).toHaveBeenCalledWith("/login");
+    it('redirects to login page on error', async () => {
+      await expect(EditorPage()).rejects.toThrow('Redirect to: /login');
+      expect(mockRedirect).toHaveBeenCalledWith('/login');
     });
   });
 
-  describe("when Supabase client fails", () => {
-    it("throws the underlying error when createClient fails", async () => {
-      const clientError = new Error("Failed to create Supabase client");
+  describe('when Supabase client fails', () => {
+    it('throws the underlying error when createClient fails', async () => {
+      const clientError = new Error('Failed to create Supabase client');
       mockCreateClient.mockRejectedValue(clientError);
       await expect(EditorPage()).rejects.toThrow(
-        "Failed to create Supabase client",
+        'Failed to create Supabase client'
       );
     });
 
-    it("throws the underlying error when getUser fails", async () => {
-      const getUserError = new Error("Failed to get user");
+    it('throws the underlying error when getUser fails', async () => {
+      const getUserError = new Error('Failed to get user');
       mockGetUser.mockRejectedValue(getUserError);
-      await expect(EditorPage()).rejects.toThrow("Failed to get user");
+      await expect(EditorPage()).rejects.toThrow('Failed to get user');
     });
   });
 });

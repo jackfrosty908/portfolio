@@ -1,6 +1,6 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import Header from "./header";
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import Header from './header';
 
 // Hoist the mock function creation before imports
 const { mockCreateClient } = vi.hoisted(() => {
@@ -10,32 +10,32 @@ const { mockCreateClient } = vi.hoisted(() => {
 });
 
 // Mock server-side Supabase client
-vi.mock("@/server/utils/supabase-server", () => ({
+vi.mock('@/server/utils/supabase-server', () => ({
   createClient: mockCreateClient,
 }));
 
 // Mock LogoutButton component
 vi.mock(
-  "@/client/features/layout/components/atoms/logout-button/LogoutButton",
+  '@/client/features/layout/components/atoms/logout-button/LogoutButton',
   () => ({
     default: () => (
-      <button type="button" data-testid="logout-button">
+      <button data-testid="logout-button" type="button">
         Logout
       </button>
     ),
-  }),
+  })
 );
 
 // Mock ModeToggle component
 vi.mock(
-  "@/features/layout/components/molecules/mode-toggle/mode-toggle",
+  '@/features/layout/components/molecules/mode-toggle/mode-toggle',
   () => ({
     ModeToggle: () => <div data-testid="mode-toggle">ModeToggle</div>,
-  }),
+  })
 );
 
 // Mock Next.js Link
-vi.mock("next/link", () => ({
+vi.mock('next/link', () => ({
   default: ({
     children,
     href,
@@ -45,13 +45,13 @@ vi.mock("next/link", () => ({
     href: string;
     [key: string]: unknown;
   }) => (
-    <a href={href} data-testid="nav-link" {...props}>
+    <a data-testid="nav-link" href={href} {...props}>
       {children}
     </a>
   ),
 }));
 
-describe("Header", () => {
+describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -60,7 +60,7 @@ describe("Header", () => {
     cleanup();
   });
 
-  describe("when user is not authenticated", () => {
+  describe('when user is not authenticated', () => {
     beforeEach(() => {
       mockCreateClient.mockResolvedValue({
         auth: {
@@ -71,66 +71,66 @@ describe("Header", () => {
       } as any);
     });
 
-    it("renders navigation links", async () => {
+    it('renders navigation links', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Signup" })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Login' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Signup' })).toBeInTheDocument();
       expect(
-        screen.getByRole("link", { name: "Forgot Password" }),
+        screen.getByRole('link', { name: 'Forgot Password' })
       ).toBeInTheDocument();
     });
 
-    it("renders correct href attributes for navigation links", async () => {
+    it('renders correct href attributes for navigation links', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
-        "href",
-        "/",
+      expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute(
+        'href',
+        '/'
       );
-      expect(screen.getByRole("link", { name: "Login" })).toHaveAttribute(
-        "href",
-        "/login",
+      expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute(
+        'href',
+        '/login'
       );
-      expect(screen.getByRole("link", { name: "Signup" })).toHaveAttribute(
-        "href",
-        "/signup",
+      expect(screen.getByRole('link', { name: 'Signup' })).toHaveAttribute(
+        'href',
+        '/signup'
       );
       expect(
-        screen.getByRole("link", { name: "Forgot Password" }),
-      ).toHaveAttribute("href", "/forgot-password");
+        screen.getByRole('link', { name: 'Forgot Password' })
+      ).toHaveAttribute('href', '/forgot-password');
     });
 
-    it("renders ModeToggle component", async () => {
+    it('renders ModeToggle component', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+      expect(screen.getByTestId('mode-toggle')).toBeInTheDocument();
     });
 
-    it("does not render user greeting or logout button", async () => {
+    it('does not render user greeting or logout button', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
       expect(screen.queryByText(/Hello,/)).not.toBeInTheDocument();
-      expect(screen.queryByTestId("logout-button")).not.toBeInTheDocument();
+      expect(screen.queryByTestId('logout-button')).not.toBeInTheDocument();
     });
 
-    it("renders horizontal rule separator", async () => {
+    it('renders horizontal rule separator', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByRole("separator")).toBeInTheDocument();
+      expect(screen.getByRole('separator')).toBeInTheDocument();
     });
   });
 
-  describe("when user is authenticated", () => {
+  describe('when user is authenticated', () => {
     const mockUser = {
       user_metadata: {
-        first_name: "John",
+        first_name: 'John',
       },
     };
 
@@ -144,41 +144,41 @@ describe("Header", () => {
       } as any);
     });
 
-    it("renders user greeting with first name", async () => {
+    it('renders user greeting with first name', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByText("Hello, John")).toBeInTheDocument();
+      expect(screen.getByText('Hello, John')).toBeInTheDocument();
     });
 
-    it("renders logout button", async () => {
+    it('renders logout button', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByTestId("logout-button")).toBeInTheDocument();
+      expect(screen.getByTestId('logout-button')).toBeInTheDocument();
     });
 
-    it("renders all navigation links", async () => {
+    it('renders all navigation links', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Signup" })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Login' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Signup' })).toBeInTheDocument();
       expect(
-        screen.getByRole("link", { name: "Forgot Password" }),
+        screen.getByRole('link', { name: 'Forgot Password' })
       ).toBeInTheDocument();
     });
 
-    it("renders ModeToggle component", async () => {
+    it('renders ModeToggle component', async () => {
       const HeaderComponent = await Header();
       render(HeaderComponent);
 
-      expect(screen.getByTestId("mode-toggle")).toBeInTheDocument();
+      expect(screen.getByTestId('mode-toggle')).toBeInTheDocument();
     });
   });
 
-  describe("component structure", () => {
+  describe('component structure', () => {
     beforeEach(() => {
       mockCreateClient.mockResolvedValue({
         auth: {
@@ -189,25 +189,25 @@ describe("Header", () => {
       } as any);
     });
 
-    it("has correct container structure", async () => {
+    it('has correct container structure', async () => {
       const HeaderComponent = await Header();
       const { container } = render(HeaderComponent);
 
       const flexContainer = container.querySelector(
-        ".flex.flex-row.items-center.justify-between.px-2.py-1",
+        '.flex.flex-row.items-center.justify-between.px-2.py-1'
       );
       expect(flexContainer).toBeInTheDocument();
       expect(flexContainer).toHaveClass(
-        "flex",
-        "flex-row",
-        "items-center",
-        "justify-between",
-        "px-2",
-        "py-1",
+        'flex',
+        'flex-row',
+        'items-center',
+        'justify-between',
+        'px-2',
+        'py-1'
       );
     });
 
-    it("calls Supabase auth.getUser", async () => {
+    it('calls Supabase auth.getUser', async () => {
       const mockGetUser = vi.fn().mockResolvedValue({
         data: { user: null },
       });

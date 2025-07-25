@@ -1,4 +1,4 @@
-import ForgotPasswordFeature from "@/client/features/forgot-password/ForgotPassword";
+import ForgotPasswordFeature from '@/client/features/forgot-password/ForgotPassword';
 
 const ForgotPasswordPage = () => {
   return <ForgotPasswordFeature />;

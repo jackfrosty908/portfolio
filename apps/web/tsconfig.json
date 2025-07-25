@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -24,15 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*",
-        "./src/client/*",
-        "./src/client/features/*",
-        "../*"
-      ],
-      "@/middleware/*": [
-        "./src/middleware/*"
-      ]
+      "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"],
+      "@/middleware/*": ["./src/middleware/*"]
     },
     "strictNullChecks": true
   },
@@ -44,9 +33,7 @@
     ".next/types/**/*.ts",
     "vitest.config.mjs"
   ],
-  "exclude": [
-    "./node_modules"
-  ],
+  "exclude": ["./node_modules"],
   "references": [
     {
       "path": "../server"

@@ -1,12 +1,12 @@
-import type { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from 'react-hook-form';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/client/features/common/components/ui/form";
-import { Input } from "@/client/features/common/components/ui/input";
+} from '@/client/features/common/components/ui/form';
+import { Input } from '@/client/features/common/components/ui/input';
 
 interface FormInputProps {
   form: UseFormReturn<any>;
@@ -25,7 +25,7 @@ const FormInput = ({
   name,
   label,
   placeholder,
-  type = "text",
+  type = 'text',
   state,
   labelSuffix,
 }: FormInputProps) => {
@@ -40,7 +40,7 @@ const FormInput = ({
             {labelSuffix}
           </div>
           <FormControl>
-            <Input type={type} placeholder={placeholder} {...field} />
+            <Input placeholder={placeholder} type={type} {...field} />
           </FormControl>
           <FormMessage />
           {state?.errors?.[name] && (

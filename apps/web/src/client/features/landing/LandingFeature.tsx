@@ -1,6 +1,6 @@
-import { BookOpen, BriefcaseBusiness, Calendar, Code } from "lucide-react";
-import Hero from "@/client/features/landing/components/molecules/hero/hero";
-import IconCard from "@/client/features/landing/components/molecules/icon-card/icon-card";
+import { BookOpen, BriefcaseBusiness, Calendar, Code } from 'lucide-react';
+import Hero from '@/client/features/landing/components/molecules/hero/hero';
+import IconCard from '@/client/features/landing/components/molecules/icon-card/icon-card';
 
 const LandingFeature = () => {
   return (
@@ -8,16 +8,16 @@ const LandingFeature = () => {
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="flex flex-col gap-16">
           <Hero
-            title="Jack's Portfolio"
             description={
               <>
-                Jack is a full stack software developer who{" "}
+                Jack is a full stack software developer who{' '}
                 <span className="font-medium text-primary">
                   builds innovative solutions
-                </span>{" "}
+                </span>{' '}
                 and loves exploring cutting-edge technologies.
               </>
             }
+            title="Jack's Portfolio"
           />
 
           <section className="space-y-8">
@@ -33,21 +33,21 @@ const LandingFeature = () => {
 
             <div className="grid gap-6 md:grid-cols-3">
               <IconCard
-                title="Portfolio"
                 description="Showcasing my projects, skills, and professional journey as a full stack developer."
                 icon={BriefcaseBusiness}
+                title="Portfolio"
               />
 
               <IconCard
-                title="Playground"
                 description="A testing ground for new frameworks, patterns, and experimental features."
                 icon={Code}
+                title="Playground"
               />
 
               <IconCard
-                title="Knowledge Base"
                 description="Eventually, a collection of insights, tutorials, and learnings from my development journey."
                 icon={BookOpen}
+                title="Knowledge Base"
               />
             </div>
           </section>
@@ -61,9 +61,9 @@ const LandingFeature = () => {
             </div>
 
             <IconCard
-              title="Feature Timeline"
               description="A detailed roadmap of upcoming features and improvements will be displayed here."
               icon={Calendar}
+              title="Feature Timeline"
             />
           </section>
         </div>

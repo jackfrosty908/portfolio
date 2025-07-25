@@ -1,10 +1,10 @@
-import { MailIcon } from "lucide-react";
+import { MailIcon } from 'lucide-react';
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/client/features/common/components/ui/card";
+} from '@/client/features/common/components/ui/card';
 
 const PendingFeature = () => {
   return (

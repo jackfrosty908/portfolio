@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useActionState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import FormInput from "@/client/features/common/components/atoms/FormInput";
-import { Button } from "@/client/features/common/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useActionState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import FormInput from '@/client/features/common/components/atoms/FormInput';
+import { Button } from '@/client/features/common/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/client/features/common/components/ui/card";
-import { Form } from "@/client/features/common/components/ui/form";
+} from '@/client/features/common/components/ui/card';
+import { Form } from '@/client/features/common/components/ui/form';
 import {
   type ResetPasswordState,
   resetPassword,
-} from "@/common/actions/supabase/actions";
+} from '@/common/actions/supabase/actions';
 
 const formSchema = z
   .object({
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters." }),
+      .min(8, { message: 'Password must be at least 8 characters.' }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -38,16 +38,16 @@ const initialState: ResetPasswordState = {};
 const ResetPasswordFeature = () => {
   const [state, formAction, pending] = useActionState(
     resetPassword,
-    initialState,
+    initialState
   );
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   return (
@@ -62,24 +62,24 @@ const ResetPasswordFeature = () => {
             <form action={formAction} className="flex flex-col gap-2">
               <FormInput
                 form={form}
-                state={state}
-                name="password"
                 label="New Password"
+                name="password"
                 placeholder=""
+                state={state}
                 type="password"
               />
               <FormInput
                 form={form}
-                state={state}
-                name="confirmPassword"
                 label="Confirm Password"
+                name="confirmPassword"
                 placeholder=""
+                state={state}
                 type="password"
               />
 
               <div className="flex flex-col gap-3">
-                <Button disabled={pending} type="submit" className="w-full">
-                  {pending ? "Updating..." : "Update password"}
+                <Button className="w-full" disabled={pending} type="submit">
+                  {pending ? 'Updating...' : 'Update password'}
                 </Button>
                 {state?.serverError && (
                   <p className="text-red-500 text-sm">{state.serverError}</p>

@@ -1,36 +1,36 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it, type Mock, vi } from "vitest";
-import ResetPasswordFeature from "./ResetPasswordFeature";
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { afterEach, describe, expect, it, type Mock, vi } from 'vitest';
+import ResetPasswordFeature from './ResetPasswordFeature';
 
-vi.mock("@/common/actions/supabase/actions", () => ({
+vi.mock('@/common/actions/supabase/actions', () => ({
   resetPassword: vi.fn(),
 }));
 
-describe("ResetPasswordFeature", () => {
+describe('ResetPasswordFeature', () => {
   afterEach(() => {
     cleanup();
     vi.resetAllMocks();
   });
 
-  it("should render the form with all fields", () => {
+  it('should render the form with all fields', () => {
     render(<ResetPasswordFeature />);
 
-    expect(screen.getByText("Set new password")).toBeDefined();
-    expect(screen.getByLabelText("New Password")).toBeDefined();
-    expect(screen.getByLabelText("Confirm Password")).toBeDefined();
+    expect(screen.getByText('Set new password')).toBeDefined();
+    expect(screen.getByLabelText('New Password')).toBeDefined();
+    expect(screen.getByLabelText('Confirm Password')).toBeDefined();
     expect(
-      screen.getByRole("button", { name: "Update password" }),
+      screen.getByRole('button', { name: 'Update password' })
     ).toBeDefined();
   });
 
-  it("should show an error if passwords do not match", async () => {
+  it('should show an error if passwords do not match', async () => {
     render(<ResetPasswordFeature />);
 
-    await userEvent.type(screen.getByLabelText("New Password"), "password123");
+    await userEvent.type(screen.getByLabelText('New Password'), 'password123');
     await userEvent.type(
-      screen.getByLabelText("Confirm Password"),
-      "password456",
+      screen.getByLabelText('Confirm Password'),
+      'password456'
     );
 
     await waitFor(() => {
@@ -38,59 +38,59 @@ describe("ResetPasswordFeature", () => {
     });
   });
 
-  it("should show an error if password is too short", async () => {
+  it('should show an error if password is too short', async () => {
     render(<ResetPasswordFeature />);
 
-    await userEvent.type(screen.getByLabelText("New Password"), "pass");
+    await userEvent.type(screen.getByLabelText('New Password'), 'pass');
 
     await waitFor(() => {
       expect(
-        screen.getByText("Password must be at least 8 characters."),
+        screen.getByText('Password must be at least 8 characters.')
       ).toBeDefined();
     });
   });
 
-  it("should show an error if the server returns an error", async () => {
-    const { resetPassword } = await import("@/common/actions/supabase/actions");
+  it('should show an error if the server returns an error', async () => {
+    const { resetPassword } = await import('@/common/actions/supabase/actions');
     (resetPassword as Mock).mockResolvedValue({
-      serverError: "Something went wrong",
+      serverError: 'Something went wrong',
     });
 
     render(<ResetPasswordFeature />);
 
-    await userEvent.type(screen.getByLabelText("New Password"), "password123");
+    await userEvent.type(screen.getByLabelText('New Password'), 'password123');
     await userEvent.type(
-      screen.getByLabelText("Confirm Password"),
-      "password123",
+      screen.getByLabelText('Confirm Password'),
+      'password123'
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Update password" }),
+      screen.getByRole('button', { name: 'Update password' })
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Something went wrong")).toBeDefined();
+      expect(screen.getByText('Something went wrong')).toBeDefined();
     });
   });
 
-  it("should show pending state while submitting", async () => {
-    const { resetPassword } = await import("@/common/actions/supabase/actions");
+  it('should show pending state while submitting', async () => {
+    const { resetPassword } = await import('@/common/actions/supabase/actions');
     (resetPassword as Mock).mockImplementation(() => new Promise(() => {}));
 
     render(<ResetPasswordFeature />);
 
-    await userEvent.type(screen.getByLabelText("New Password"), "password123");
+    await userEvent.type(screen.getByLabelText('New Password'), 'password123');
     await userEvent.type(
-      screen.getByLabelText("Confirm Password"),
-      "password123",
+      screen.getByLabelText('Confirm Password'),
+      'password123'
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Update password" }),
+      screen.getByRole('button', { name: 'Update password' })
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Updating...")).toBeDefined();
+      expect(screen.getByText('Updating...')).toBeDefined();
     });
   });
 });

@@ -1,7 +1,7 @@
-import Link from "next/link";
-import LogoutButton from "@/client/features/layout/components/atoms/logout-button/LogoutButton";
-import { ModeToggle } from "@/features/layout/components/molecules/mode-toggle/mode-toggle";
-import { createClient } from "@/server/utils/supabase-server";
+import Link from 'next/link';
+import LogoutButton from '@/client/features/layout/components/atoms/logout-button/LogoutButton';
+import { ModeToggle } from '@/features/layout/components/molecules/mode-toggle/mode-toggle';
+import { createClient } from '@/server/utils/supabase-server';
 
 export default async function Header() {
   const supabase = await createClient();
@@ -11,10 +11,10 @@ export default async function Header() {
   } = await supabase.auth.getUser();
 
   const links = [
-    { to: "/", label: "Home" },
-    { to: "/login", label: "Login" },
-    { to: "/signup", label: "Signup" },
-    { to: "/forgot-password", label: "Forgot Password" },
+    { to: '/', label: 'Home' },
+    { to: '/login', label: 'Login' },
+    { to: '/signup', label: 'Signup' },
+    { to: '/forgot-password', label: 'Forgot Password' },
   ];
 
   return (
@@ -23,7 +23,7 @@ export default async function Header() {
         <nav className="flex gap-4 text-lg">
           {links.map(({ to, label }) => {
             return (
-              <Link key={to} href={to}>
+              <Link href={to} key={to}>
                 {label}
               </Link>
             );

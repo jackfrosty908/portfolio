@@ -1,4 +1,4 @@
-import PendingFeature from "@/client/features/signup/PendingFeature";
+import PendingFeature from '@/client/features/signup/PendingFeature';
 
 const PendingPage = () => {
   return <PendingFeature />;

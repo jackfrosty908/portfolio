@@ -1,11 +1,11 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/client/features/common/components/ui/card";
+} from '@/client/features/common/components/ui/card';
 
 interface IconCardProps {
   title: string;
