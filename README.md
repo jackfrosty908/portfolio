@@ -1,6 +1,6 @@
 # portfolio
 
-This is a repo where I can try out new technoligies, and eventually write blog posts/
+This is a repo where I can try out new technologies, and eventually write blog posts.
 
 ## Getting Started
 
