@@ -17,7 +17,7 @@ import { Form } from '@/client/features/common/components/ui/form';
 import { cn } from '@/client/lib/utils';
 import { login } from '@/common/actions/supabase/actions';
 import { loginSchema } from '@/common/actions/supabase/schema';
-import { logger } from '@/common/utils/logger/logger';
+import logger from '@/logger';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 

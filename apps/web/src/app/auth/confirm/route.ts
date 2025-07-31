@@ -1,6 +1,7 @@
 import type { EmailOtpType } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import type { NextRequest } from 'next/server';
+import logger from '@/logger';
 import { createClient } from '@/server/utils/supabase-server';
 
 export async function GET(request: NextRequest) {
@@ -20,6 +21,17 @@ export async function GET(request: NextRequest) {
       // redirect user to specified redirect URL or root of app
       redirect(next);
     }
+
+    logger.error('OTP verification failed', {
+      type,
+      error: error?.message,
+      tokenHash: token_hash,
+    });
+  } else {
+    logger.error('Missing required parameters for OTP verification', {
+      hasTokenHash: !!token_hash,
+      hasType: !!type,
+    });
   }
 
   //TODO: @JF redirect the user to an error page with some instructions
