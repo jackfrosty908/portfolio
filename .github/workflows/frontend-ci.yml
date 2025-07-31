@@ -9,7 +9,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    name: CI
+    name: Frontend CI
 
     permissions:
       contents: read
