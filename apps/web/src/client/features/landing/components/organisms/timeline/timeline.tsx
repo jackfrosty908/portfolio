@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/client/features/common/components/ui/card';
-import timelineItems from '@/client/features/landing/components/organisms/timeline/timelineItems';
+import timelineItems from '@/client/features/landing/components/organisms/timeline/timeline-items';
 
 const getStatusStyles = (status: string) => {
   switch (status) {
