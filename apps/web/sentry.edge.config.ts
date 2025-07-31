@@ -11,6 +11,7 @@ Sentry.init({
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
+  integrations: [Sentry.consoleIntegration({ levels: ['error'] })],
 
   // Enable logs to be sent to Sentry
   enableLogs: true,

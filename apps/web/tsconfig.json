@@ -21,7 +21,8 @@
     ],
     "paths": {
       "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"],
-      "@/middleware/*": ["./src/middleware/*"]
+      "@/middleware/*": ["./src/middleware/*"],
+      "@/logger": ["./src/common/utils/logger/logger.ts"]
     },
     "strictNullChecks": true
   },

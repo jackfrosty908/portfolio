@@ -5,3 +5,22 @@ alwaysApply: true
 - Don't test CSS classes, DOM structure, or styling details in unit tests.
 - Test user-visible behavior and content, not implementation details.
 - Write tests that survive refactoring without breaking functionality.
+
+## Logger Examples
+`logger.fmt` is a template literal function that should be used to bring variables into the structured logs.
+```javascript
+import logger from '@/logger';
+
+
+logger.debug(logger.fmt`Cache miss for user: ${userId}`);
+logger.info("Updated profile", { profileId: 345 });
+logger.warn("Rate limit reached for endpoint", {
+  endpoint: "/api/results/",
+  isEnterprise: false,
+});
+logger.error("Failed to process payment", {
+  orderId: "order_123",
+  amount: 99.99,
+});
+
+```

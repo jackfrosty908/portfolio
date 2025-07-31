@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/client/features/common/components/ui/button';
 import { createClient } from '@/client/utils/supabase-client';
-import { logger } from '@/common/utils/logger/logger';
+import logger from '@/logger';
 
 export default function LogoutButton() {
   const router = useRouter();
