@@ -1,4 +1,6 @@
-/** biome-ignore-all lint/suspicious/noConsole: console logger will be replaced later */
+/** biome-ignore-all lint/suspicious/noConsole: This is the one place where we use console.log */
+import { logger as sentryLogger } from '@sentry/nextjs';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface Logger {
@@ -6,27 +8,31 @@ interface Logger {
   info: (message: string, ...args: unknown[]) => void;
   warn: (message: string, ...args: unknown[]) => void;
   error: (message: string, ...args: unknown[]) => void;
-  log: (message: string, ...args: unknown[]) => void;
 }
 
-const createLogger = (): Logger => ({
-  debug: (message: string, ...args: unknown[]): void => {
-    console.debug(message, ...args);
-  },
-  info: (message: string, ...args: unknown[]): void => {
-    console.info(message, ...args);
-  },
-  warn: (message: string, ...args: unknown[]): void => {
-    console.warn(message, ...args);
-  },
-  error: (message: string, ...args: unknown[]): void => {
-    console.error(message, ...args);
-  },
-  log: (message: string, ...args: unknown[]): void => {
-    console.log(message, ...args);
-  },
-});
+const createLogger = (): Logger => {
+  return {
+    debug: (message: string, ...args: unknown[]): void => {
+      const attributes = args.length > 0 ? { data: args } : undefined;
+      sentryLogger.debug(message, attributes);
+    },
+    info: (message: string, ...args: unknown[]): void => {
+      const attributes = args.length > 0 ? { data: args } : undefined;
+      sentryLogger.info(message, attributes);
+    },
+    warn: (message: string, ...args: unknown[]): void => {
+      const attributes = args.length > 0 ? { data: args } : undefined;
+      sentryLogger.warn(message, attributes);
+    },
+
+    error: (message: string, ...args: unknown[]): void => {
+      const attributes = args.length > 0 ? { data: args } : undefined;
+      sentryLogger.error(message, attributes);
+    },
+  };
+};
 
 const logger = createLogger();
 
-export { logger, type Logger, type LogLevel };
+export type { Logger, LogLevel };
+export default logger;

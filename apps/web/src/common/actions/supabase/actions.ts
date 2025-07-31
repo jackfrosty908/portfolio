@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { loginSchema } from '@/common/actions/supabase/schema';
-
+import logger from '@/common/utils/logger/logger';
 import { createClient } from '@/server/utils/supabase-server';
 
 export type SignupState = {
@@ -41,6 +41,9 @@ export async function login(_prevState: unknown, formData: FormData) {
   );
 
   if (!validatedFields.success) {
+    logger.error('Login validation failed', {
+      errors: validatedFields.error.flatten().fieldErrors,
+    });
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
@@ -51,6 +54,10 @@ export async function login(_prevState: unknown, formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
+    logger.error('Login failed', {
+      email: data.email,
+      error: error.message,
+    });
     return { error: 'Invalid credentials' };
   }
 
@@ -79,6 +86,9 @@ export async function signup(_prevState: SignupState, formData: FormData) {
   );
 
   if (!validatedFields.success) {
+    logger.error('Signup validation failed', {
+      errors: validatedFields.error.flatten().fieldErrors,
+    });
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
@@ -98,6 +108,10 @@ export async function signup(_prevState: SignupState, formData: FormData) {
   });
 
   if (error) {
+    logger.error('Signup failed', {
+      email: validatedData.email,
+      error: error.message,
+    });
     return {
       serverError: 'Whoops, something went wrong. Please try again.',
     };
@@ -122,6 +136,9 @@ export async function forgotPassword(
   );
 
   if (!validatedFields.success) {
+    logger.error('Forgot password validation failed', {
+      errors: validatedFields.error.flatten().fieldErrors,
+    });
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
@@ -137,6 +154,10 @@ export async function forgotPassword(
   );
 
   if (error) {
+    logger.error('Password reset email failed', {
+      email: validatedData.email,
+      error: error.message,
+    });
     return {
       serverError: 'Failed to send reset email. Please try again.',
     };
@@ -170,6 +191,9 @@ export async function resetPassword(
   );
 
   if (!validatedFields.success) {
+    logger.error('Reset password validation failed', {
+      errors: validatedFields.error.flatten().fieldErrors,
+    });
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
@@ -182,6 +206,9 @@ export async function resetPassword(
   });
 
   if (error) {
+    logger.error('Password update failed', {
+      error: error.message,
+    });
     return {
       serverError: 'Failed to update password. Please try again.',
     };
