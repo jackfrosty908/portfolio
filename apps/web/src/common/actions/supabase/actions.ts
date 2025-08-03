@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { loginSchema } from '@/common/actions/supabase/schema';
-import logger from '@/common/utils/logger/logger';
 import { createClient } from '@/server/utils/supabase-server';
+import logger from '@/logger';
 
 export type SignupState = {
   errors?: {
@@ -146,6 +146,7 @@ export async function forgotPassword(
 
   const { data: validatedData } = validatedFields;
 
+  logger.info(`Resetting password with redirect to ${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`);
   const { error } = await supabase.auth.resetPasswordForEmail(
     validatedData.email,
     {
