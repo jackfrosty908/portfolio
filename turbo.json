@@ -4,7 +4,9 @@
     "CORS_ORIGIN",
     "DATABASE_URL",
     "NEXT_PUBLIC_API_URL",
-    "NODEJS_HELPERS"
+    "NODEJS_HELPERS",
+    "SENTRY_AUTH_TOKEN",
+    "SENTRY_ENV"
   ],
   "ui": "tui",
   "tasks": {
