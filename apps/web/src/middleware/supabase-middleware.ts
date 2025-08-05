@@ -47,6 +47,14 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Check if user is trying to access admin without being authenticated
+  if (request.nextUrl.pathname.startsWith('/admin') && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    url.searchParams.set('redirectTo', '/admin'); // Optional: redirect back to admin after login
+    return NextResponse.redirect(url);
+  }
+
   if (
     !(
       user ||

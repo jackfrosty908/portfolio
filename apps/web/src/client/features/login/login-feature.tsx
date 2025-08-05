@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
 import type { z } from 'zod';
 import FormInput from '@/client/features/common/components/atoms/form-input';
 import { Button } from '@/client/features/common/components/ui/button';
@@ -24,6 +25,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const LoginFeature = () => {
   const [serverError, setServerError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo');
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -42,6 +45,11 @@ const LoginFeature = () => {
       const formData = new FormData();
       formData.append('email', data.email);
       formData.append('password', data.password);
+      
+      // Add redirect parameter if it exists
+      if (redirectTo) {
+        formData.append('redirectTo', redirectTo);
+      }
 
       const result = await login({}, formData);
 
@@ -62,7 +70,10 @@ const LoginFeature = () => {
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            {redirectTo === '/admin' 
+              ? 'Please login to access the admin panel'
+              : 'Enter your email below to login to your account'
+            }
           </CardDescription>
         </CardHeader>
         <CardContent>
