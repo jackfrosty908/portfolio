@@ -62,7 +62,14 @@ export async function login(_prevState: unknown, formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  
+  // Check if there's a redirect
+  const redirectTo = formData.get('redirectTo') as string;
+  if (redirectTo && redirectTo.startsWith('/')) {
+    redirect(redirectTo);
+  } else {
+    redirect('/');
+  }
 }
 
 const signupSchema = z.object({
