@@ -51,6 +51,14 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(
     sql`REVOKE EXECUTE ON FUNCTION public.custom_access_token_hook(jsonb) FROM authenticated, anon, public;`
   );
+  await db.execute(
+    sql`GRANT SELECT ON TABLE public.user_roles TO supabase_auth_admin;`
+  );
+
+  //Revoke permissions from other roles (e.g. anon, authenticated, public) to ensure the function is not accessible by Supabase Data APIs.
+  await db.execute(
+    sql`REVOKE ALL ON TABLE public.user_roles FROM authenticated, anon, public;`
+  );
 
   // Let Supabase Auth read user_roles for role lookup
   await db.execute(
@@ -86,14 +94,27 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     END $$;
   `);
 
-  // Revoke function execution and drop function
-  await db.execute(
-    sql`REVOKE EXECUTE ON FUNCTION public.custom_access_token_hook(jsonb) FROM supabase_auth_admin;`
-  );
+  // Revoke only if the function exists
+  await db.execute(sql`
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1
+        FROM pg_proc p
+        JOIN pg_namespace n ON n.oid = p.pronamespace
+        WHERE p.proname = 'custom_access_token_hook'
+          AND n.nspname = 'public'
+          AND pg_get_function_identity_arguments(p.oid) = 'jsonb'
+      ) THEN
+        REVOKE EXECUTE ON FUNCTION public.custom_access_token_hook(jsonb) FROM supabase_auth_admin;
+        REVOKE EXECUTE ON FUNCTION public.custom_access_token_hook(jsonb) FROM authenticated, anon, public;
+      END IF;
+    END $$;
+  `);
+
+  // Drop function and table if present
   await db.execute(
     sql`DROP FUNCTION IF EXISTS public.custom_access_token_hook(jsonb);`
   );
-
-  // Table
   await db.execute(sql`DROP TABLE IF EXISTS public.user_roles;`);
 }

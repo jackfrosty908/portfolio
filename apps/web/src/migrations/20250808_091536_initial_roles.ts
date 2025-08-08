@@ -104,15 +104,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
+  // Clean up dependents that reference enums
+  await db.execute(
+    sql`DROP FUNCTION IF EXISTS public.custom_access_token_hook(jsonb);`
+  );
+  await db.execute(sql`DROP TABLE IF EXISTS public.user_roles;`);
+
+  // Drop only app-owned tables created by this migration
   await db.execute(sql`
-   DROP TABLE "role_permissions" CASCADE;
-  DROP TABLE "admins" CASCADE;
-  DROP TABLE "users" CASCADE;
-  DROP TABLE "payload_locked_documents" CASCADE;
-  DROP TABLE "payload_locked_documents_rels" CASCADE;
-  DROP TABLE "payload_preferences" CASCADE;
-  DROP TABLE "payload_preferences_rels" CASCADE;
-  DROP TABLE "payload_migrations" CASCADE;
-  DROP TYPE "public"."app_role";
-  DROP TYPE "public"."app_permission";`);
+    DROP TABLE IF EXISTS "role_permissions" CASCADE;
+    DROP TABLE IF EXISTS "admins" CASCADE;
+    DROP TABLE IF EXISTS "users" CASCADE;
+    DROP TYPE IF EXISTS "public"."app_role" CASCADE;
+    DROP TYPE IF EXISTS "public"."app_permission" CASCADE;
+  `);
 }
