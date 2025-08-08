@@ -11,5 +11,5 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "cSpell.words": ["supabase", "treeify"]
+  "cSpell.words": ["payloadcms", "supabase", "treeify"]
 }

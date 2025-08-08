@@ -1,5 +1,8 @@
 /** biome-ignore-all lint/suspicious/noConsole: This is the one place where we use console.log */
-import { logger as sentryLogger } from '@sentry/nextjs';
+// biome-ignore lint/performance/noNamespaceImport: some cli tools fail if we do not import this way
+import * as Sentry from '@sentry/nextjs';
+
+const sentryLogger = Sentry?.logger ?? console;
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 

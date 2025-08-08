@@ -156,6 +156,13 @@ POSTGRES_DATABASE_URI=postgres://postgres:postgres@localhost:54322/postgres
   pnpm payload migrate:reset && pnpm payload migrate
   ```
 
+### New environment tasks
+
+Enable the hook in Supabase
+ - Cloud: Authentication → Hooks → Custom access token → set to `pg-functions://postgres/public/custom_access_token_hook`
+ - Local: `supabase/config.toml` (already enabled)
+
+
 ### Monorepo usage (run from repo root)
 - Create
   ```bash
