@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { loginSchema } from '@/common/actions/supabase/schema';
-import { createClient } from '@/server/utils/supabase-server';
 import logger from '@/logger';
+import { createClient } from '@/server/utils/supabase-server';
 
 export type SignupState = {
   errors?: {
@@ -146,7 +146,9 @@ export async function forgotPassword(
 
   const { data: validatedData } = validatedFields;
 
-  logger.info(`Resetting password with redirect to ${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`);
+  logger.info(
+    `Resetting password with redirect to ${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`
+  );
   const { error } = await supabase.auth.resetPasswordForEmail(
     validatedData.email,
     {
@@ -208,7 +210,8 @@ export async function resetPassword(
 
   if (error) {
     logger.error('Password update failed', {
-      error: error.message,
+      errorMessage: error.message,
+      error,
     });
     return {
       serverError: 'Failed to update password. Please try again.',
