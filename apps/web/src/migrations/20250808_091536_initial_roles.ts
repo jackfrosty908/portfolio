@@ -117,5 +117,10 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     DROP TABLE IF EXISTS "users" CASCADE;
     DROP TYPE IF EXISTS "public"."app_role" CASCADE;
     DROP TYPE IF EXISTS "public"."app_permission" CASCADE;
+    DROP TABLE "payload_locked_documents" CASCADE;
+    DROP TABLE "payload_locked_documents_rels" CASCADE;
+    DROP TABLE "payload_preferences" CASCADE;
+    DROP TABLE "payload_preferences_rels" CASCADE;
+    DROP TABLE "payload_migrations" CASCADE;
   `);
 }
