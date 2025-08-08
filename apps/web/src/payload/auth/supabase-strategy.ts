@@ -1,7 +1,10 @@
-export const supabaseStrategy = async ({ 
-  payload, 
-  headers 
+import logger from '@/logger';
+
+export const supabaseStrategy = async ({
+  payload,
+  headers,
 }: {
+  // biome-ignore lint/suspicious/noExplicitAny: not sure what the type here is
   payload: any;
   headers: Headers;
 }) => {
@@ -16,7 +19,7 @@ export const supabaseStrategy = async ({
 
     // Parse cookies
     const cookies = Object.fromEntries(
-      cookieHeader.split('; ').map(c => {
+      cookieHeader.split('; ').map((c) => {
         const [name, value] = c.split('=');
         return [name, decodeURIComponent(value)];
       })
@@ -35,7 +38,7 @@ export const supabaseStrategy = async ({
 
     // Create Supabase client
     const { createServerClient } = await import('@supabase/ssr');
-    
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL as string,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
@@ -104,9 +107,9 @@ export const supabaseStrategy = async ({
       user: null,
     };
   } catch (error) {
-    console.error('Supabase strategy error:', error);
+    logger.error('Supabase strategy error:', error);
     return {
       user: null,
     };
   }
-}; 
+};
