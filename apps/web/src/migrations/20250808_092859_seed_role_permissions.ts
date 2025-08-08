@@ -51,40 +51,45 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-    DELETE FROM public.role_permissions
-    WHERE (role, permission) IN (
-      ('admin','content.create'),
-      ('admin','content.read'),
-      ('admin','content.update'),
-      ('admin','content.delete'),
-      ('admin','content.update.others'),
-      ('admin','content.delete.others'),
-      ('admin','comment.create'),
-      ('admin','comment.read'),
-      ('admin','comment.update'),
-      ('admin','comment.delete'),
-      ('admin','comment.update.others'),
-      ('admin','comment.delete.others'),
-      ('admin','user.manage'),
+    DO $$
+    BEGIN
+      IF to_regclass('public.role_permissions') IS NOT NULL THEN
+        DELETE FROM public.role_permissions
+        WHERE (role, permission) IN (
+          ('admin','content.create'),
+          ('admin','content.read'),
+          ('admin','content.update'),
+          ('admin','content.delete'),
+          ('admin','content.update.others'),
+          ('admin','content.delete.others'),
+          ('admin','comment.create'),
+          ('admin','comment.read'),
+          ('admin','comment.update'),
+          ('admin','comment.delete'),
+          ('admin','comment.update.others'),
+          ('admin','comment.delete.others'),
+          ('admin','user.manage'),
 
-      ('writer','content.create'),
-      ('writer','content.read'),
-      ('writer','content.update'),
-      ('writer','content.delete'),
-      ('writer','comment.create'),
-      ('writer','comment.read'),
-      ('writer','comment.update'),
-      ('writer','comment.delete'),
+          ('writer','content.create'),
+          ('writer','content.read'),
+          ('writer','content.update'),
+          ('writer','content.delete'),
+          ('writer','comment.create'),
+          ('writer','comment.read'),
+          ('writer','comment.update'),
+          ('writer','comment.delete'),
 
-      ('user','content.read'),
-      ('user','comment.create'),
-      ('user','comment.read'),
-      ('user','comment.update'),
-      ('user','comment.delete'),
+          ('user','content.read'),
+          ('user','comment.create'),
+          ('user','comment.read'),
+          ('user','comment.update'),
+          ('user','comment.delete'),
 
-      ('public','content.read'),
-      ('public','comment.read')
-    );
+          ('public','content.read'),
+          ('public','comment.read')
+        );
+      END IF;
+    END $$;
     DROP INDEX IF EXISTS role_permissions_role_permission_key;
   `);
 }
