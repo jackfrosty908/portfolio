@@ -100,7 +100,21 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_preferences_rels_path_idx" ON "payload_preferences_rels" USING btree ("path");
   CREATE INDEX "payload_preferences_rels_admins_id_idx" ON "payload_preferences_rels" USING btree ("admins_id");
   CREATE INDEX "payload_migrations_updated_at_idx" ON "payload_migrations" USING btree ("updated_at");
-  CREATE INDEX "payload_migrations_created_at_idx" ON "payload_migrations" USING btree ("created_at");`);
+  CREATE INDEX "payload_migrations_created_at_idx" ON "payload_migrations" USING btree ("created_at");
+  
+    -- Block API access to Payload internals
+  ALTER TABLE public.payload_locked_documents ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.payload_locked_documents_rels ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.payload_preferences ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.payload_preferences_rels ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE public.payload_migrations ENABLE ROW LEVEL SECURITY;
+
+  REVOKE ALL ON TABLE public.payload_locked_documents FROM authenticated, anon, public;
+  REVOKE ALL ON TABLE public.payload_locked_documents_rels FROM authenticated, anon, public;
+  REVOKE ALL ON TABLE public.payload_preferences FROM authenticated, anon, public;
+  REVOKE ALL ON TABLE public.payload_preferences_rels FROM authenticated, anon, public;
+  REVOKE ALL ON TABLE public.payload_migrations FROM authenticated, anon, public;
+  `);
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
