@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { type IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders } from 'node:http';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 

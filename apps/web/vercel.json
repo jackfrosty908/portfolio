@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm dlx payload migrate && pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile"
+}

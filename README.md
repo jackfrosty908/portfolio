@@ -123,6 +123,57 @@ If you prefer a standalone Postgres instance instead of Supabase, follow these s
 2. Update `apps/server/.env` with the connection string.
 3. Run `pnpm db:push`.
 
+## Payload CMS migrations (web)
+
+### Prerequisites
+Create `apps/web/.env.local`:
+```dotenv
+PAYLOAD_SECRET=secret
+POSTGRES_DATABASE_URI=postgres://postgres:postgres@localhost:54322/postgres
+```
+
+### Common commands (run from `apps/web`)
+- Create a migration
+  ```bash
+  pnpm payload migrate:create your-migration-name 
+  ```
+- Create a new empty migration
+  ```bash
+  pnpm payload migrate:create your-migration-name --skip-empty --force-accept-warning
+  ```
+- See pending/applied migrations
+  ```bash
+  pnpm payload migrate:status
+  ```
+- Apply all pending migrations (runs seed migrations too)
+  ```bash
+  pnpm payload migrate
+  ```
+- Re-run from scratch
+  ```bash
+  pnpm payload migrate:fresh
+  # or:
+  pnpm payload migrate:reset && pnpm payload migrate
+  ```
+
+### Monorepo usage (run from repo root)
+- Create
+  ```bash
+  pnpm --filter web payload migrate:create your-migration-name --skip-empty --force-accept-warning
+  ```
+- Status
+  ```bash
+  pnpm --filter web payload migrate:status
+  ```
+- Migrate
+  ```bash
+  pnpm --filter web payload migrate
+  ```
+
+### Notes
+- Stop any running dev server before migrating.
+- Don’t mix “push mode” and migrations at the same time.
+
 ---
 
 ## Project Structure

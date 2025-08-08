@@ -61,7 +61,7 @@ export const supabaseStrategy = async ({
       };
     }
 
-    // Find existing admin user
+    // First, check if user exists in admins collection
     const adminUsers = await payload.find({
       collection: 'admins',
       where: {
@@ -80,20 +80,28 @@ export const supabaseStrategy = async ({
       };
     }
 
-    // Create new admin user
-    const newUser = await payload.create({
-      collection: 'admins',
-      data: {
-        email: user.email,
-        supabaseId: user.id,
+    // If not found in admins, check users collection
+    const regularUsers = await payload.find({
+      collection: 'users',
+      where: {
+        supabaseId: {
+          equals: user.id,
+        },
       },
     });
 
+    if (regularUsers.docs.length > 0) {
+      return {
+        user: {
+          ...regularUsers.docs[0],
+          collection: 'users',
+        },
+      };
+    }
+
+    // User not found in either collection - deny access
     return {
-      user: {
-        ...newUser,
-        collection: 'admins',
-      },
+      user: null,
     };
   } catch (error) {
     console.error('Supabase strategy error:', error);
