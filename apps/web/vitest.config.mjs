@@ -73,6 +73,9 @@ export default defineConfig({
 
         // Provider components - simple wrappers around third-party providers
         '**/src/client/providers/**',
+
+        // migrations
+        '**/src/migrations/**',
       ],
     },
   },

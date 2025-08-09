@@ -87,6 +87,11 @@ export const supabaseStrategy = async ({
       return { user: null };
     }
 
+    if (!user.id) {
+      logger.error('Supabase strategy error:', new Error('User id missing'));
+      return { user: null };
+    }
+
     // Look up the Payload user (Payload users.id == Supabase UUID)
     const found = await payload.find({
       collection: 'users',
@@ -98,6 +103,7 @@ export const supabaseStrategy = async ({
     if (found.docs.length === 0) {
       const created = await payload.create({
         collection: 'users',
+
         data: {
           id: user.id,
           email: user.email ?? '',

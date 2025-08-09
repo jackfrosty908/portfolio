@@ -28,6 +28,12 @@ export const Users: CollectionConfig = {
     delete: () => false,
   },
   fields: [
+    {
+      name: 'id',
+      type: 'text',
+      required: true,
+      admin: { hidden: true },
+    },
     { name: 'first_name', type: 'text', admin: { readOnly: true } },
     { name: 'last_name', type: 'text', admin: { readOnly: true } },
     {

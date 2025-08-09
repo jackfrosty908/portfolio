@@ -180,6 +180,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  id?: T;
   first_name?: T;
   last_name?: T;
   email?: T;
