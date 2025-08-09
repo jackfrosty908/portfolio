@@ -1,5 +1,5 @@
 {
-  "id": "ba833d74-ca9a-44c7-9d69-8ca8be28c428",
+  "id": "935568c0-f554-4036-8a8c-207e4c600dd5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -48,105 +48,26 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.admins": {
-      "name": "admins",
+    "public.user_roles": {
+      "name": "user_roles",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "supabase_id": {
-          "name": "supabase_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
+        "role": {
+          "name": "role",
+          "type": "app_role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "default": "'user'"
         }
       },
-      "indexes": {
-        "admins_email_idx": {
-          "name": "admins_email_idx",
-          "columns": [
-            {
-              "expression": "email",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "admins_supabase_id_idx": {
-          "name": "admins_supabase_id_idx",
-          "columns": [
-            {
-              "expression": "supabase_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "admins_updated_at_idx": {
-          "name": "admins_updated_at_idx",
-          "columns": [
-            {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "admins_created_at_idx": {
-          "name": "admins_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -160,12 +81,19 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -174,13 +102,13 @@
           "name": "email",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "supabase_id": {
           "name": "supabase_id",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "updated_at": {
           "name": "updated_at",
@@ -272,9 +200,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "global_slug": {
           "name": "global_slug",
@@ -369,7 +298,7 @@
         },
         "parent_id": {
           "name": "parent_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -379,15 +308,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "admins_id": {
-          "name": "admins_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "users_id": {
           "name": "users_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }
@@ -438,21 +361,6 @@
           "method": "btree",
           "with": {}
         },
-        "payload_locked_documents_rels_admins_id_idx": {
-          "name": "payload_locked_documents_rels_admins_id_idx",
-          "columns": [
-            {
-              "expression": "admins_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "payload_locked_documents_rels_users_id_idx": {
           "name": "payload_locked_documents_rels_users_id_idx",
           "columns": [
@@ -476,19 +384,6 @@
           "tableTo": "payload_locked_documents",
           "columnsFrom": [
             "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_admins_fk": {
-          "name": "payload_locked_documents_rels_admins_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "admins",
-          "columnsFrom": [
-            "admins_id"
           ],
           "columnsTo": [
             "id"
@@ -522,9 +417,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "key": {
           "name": "key",
@@ -625,7 +521,7 @@
         },
         "parent_id": {
           "name": "parent_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -635,9 +531,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "admins_id": {
-          "name": "admins_id",
-          "type": "integer",
+        "users_id": {
+          "name": "users_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }
@@ -688,11 +584,11 @@
           "method": "btree",
           "with": {}
         },
-        "payload_preferences_rels_admins_id_idx": {
-          "name": "payload_preferences_rels_admins_id_idx",
+        "payload_preferences_rels_users_id_idx": {
+          "name": "payload_preferences_rels_users_id_idx",
           "columns": [
             {
-              "expression": "admins_id",
+              "expression": "users_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -718,12 +614,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "payload_preferences_rels_admins_fk": {
-          "name": "payload_preferences_rels_admins_fk",
+        "payload_preferences_rels_users_fk": {
+          "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
-          "tableTo": "admins",
+          "tableTo": "users",
           "columnsFrom": [
-            "admins_id"
+            "users_id"
           ],
           "columnsTo": [
             "id"
@@ -744,9 +640,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",

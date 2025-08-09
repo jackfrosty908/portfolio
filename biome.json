@@ -13,7 +13,7 @@
       "**",
       "!apps/web/src/client/features/common/components/ui/**",
       "!apps/web/payload-types.ts",
-      "!apps/web/src/migrations/index.ts"
+      "!apps/web/src/migrations/**"
     ]
   }
 }

@@ -49,14 +49,8 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  logger.info('User is trying to access admin', {
-    path: request.nextUrl.pathname,
-    userId: user?.id,
-  });
-
   // Check if user is trying to access admin without being authenticated
   if (request.nextUrl.pathname.startsWith('/admin') && !user) {
-    logger.info('User is trying to access admin without being authenticated');
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.searchParams.set('redirectTo', '/admin'); // Optional: redirect back to admin after login
@@ -78,18 +72,18 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getSession();
     const token = session?.access_token;
     if (!token) {
-      logger.info('User is trying to access admin without a token', {
-        path: request.nextUrl.pathname,
-        userId: user?.id,
-      });
       const url = request.nextUrl.clone();
       url.pathname = '/login';
       return NextResponse.redirect(url);
     }
 
     const claims = decodeJwt(token) as Record<string, unknown>;
-    logger.info('JWT claims', { claims });
-    if (claims.user_role !== 'admin') {
+    const permissions = Array.isArray(
+      (claims as Record<string, unknown>).permissions
+    )
+      ? ((claims as Record<string, unknown>).permissions as string[])
+      : [];
+    if (!permissions.includes('user.manage')) {
       logger.info('User is trying to access admin without admin role', {
         path: request.nextUrl.pathname,
         userId: user?.id,
