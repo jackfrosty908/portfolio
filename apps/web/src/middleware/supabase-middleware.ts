@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
+import { decodeJwt } from 'jose';
 import { type NextRequest, NextResponse } from 'next/server';
+import logger from '@/common/utils/logger/logger';
 
 /*
  * Be careful when protecting pages. The server gets the user session from the cookies, which can be spoofed by anyone.
@@ -47,12 +49,55 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  logger.info('User is trying to access admin', {
+    path: request.nextUrl.pathname,
+    userId: user?.id,
+  });
+
   // Check if user is trying to access admin without being authenticated
   if (request.nextUrl.pathname.startsWith('/admin') && !user) {
+    logger.info('User is trying to access admin without being authenticated');
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.searchParams.set('redirectTo', '/admin'); // Optional: redirect back to admin after login
     return NextResponse.redirect(url);
+  }
+
+  // require admin role for /admin
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    // already have `user` from getUser() above
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.searchParams.set('redirectTo', '/admin');
+      return NextResponse.redirect(url);
+    }
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) {
+      logger.info('User is trying to access admin without a token', {
+        path: request.nextUrl.pathname,
+        userId: user?.id,
+      });
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      return NextResponse.redirect(url);
+    }
+
+    const claims = decodeJwt(token) as Record<string, unknown>;
+    logger.info('JWT claims', { claims });
+    if (claims.user_role !== 'admin') {
+      logger.info('User is trying to access admin without admin role', {
+        path: request.nextUrl.pathname,
+        userId: user?.id,
+      });
+      const url = request.nextUrl.clone();
+      url.pathname = '/403';
+      return NextResponse.redirect(url);
+    }
   }
 
   if (

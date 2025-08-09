@@ -9,6 +9,9 @@ import { rolePermissions } from './payload/drizzle/tables/role_permissions';
 import { userRoles } from './payload/drizzle/tables/user_roles';
 
 export default buildConfig({
+  admin: {
+    user: 'admins',
+  },
   // If you'd like to use Rich Text, pass your editor here
   //TODO: investigate replacing with plate.js editor
   editor: lexicalEditor(),

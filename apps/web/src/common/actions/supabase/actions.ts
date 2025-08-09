@@ -54,8 +54,7 @@ export async function login(_prevState: unknown, formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    logger.error('Login failed', {
-      email: data.email,
+    logger.warn('Login failed', {
       error: error.message,
     });
     return { error: 'Invalid credentials' };

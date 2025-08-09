@@ -103,6 +103,12 @@ export const supabaseStrategy = async ({
     }
 
     // User not found in either collection - deny access
+    if (adminUsers.docs.length === 0 && regularUsers.docs.length === 0) {
+      logger.warn('Supabase user not mapped to admins or users', {
+        supabaseId: user.id,
+      });
+      return { user: null };
+    }
     return {
       user: null,
     };

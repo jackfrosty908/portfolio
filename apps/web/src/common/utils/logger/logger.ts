@@ -18,19 +18,23 @@ const createLogger = (): Logger => {
     debug: (message: string, ...args: unknown[]): void => {
       const attributes = args.length > 0 ? { data: args } : undefined;
       sentryLogger.debug(message, attributes);
+      console.debug(message, attributes);
     },
     info: (message: string, ...args: unknown[]): void => {
       const attributes = args.length > 0 ? { data: args } : undefined;
       sentryLogger.info(message, attributes);
+      console.info(message, attributes);
     },
     warn: (message: string, ...args: unknown[]): void => {
       const attributes = args.length > 0 ? { data: args } : undefined;
       sentryLogger.warn(message, attributes);
+      console.warn(message, attributes);
     },
 
     error: (message: string, ...args: unknown[]): void => {
       const attributes = args.length > 0 ? { data: args } : undefined;
       sentryLogger.error(message, attributes);
+      console.error(message, attributes);
     },
   };
 };
