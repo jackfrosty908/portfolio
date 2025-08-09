@@ -45,23 +45,31 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-    -- Drop FK and composite PK
-    ALTER TABLE public.user_roles DROP CONSTRAINT IF EXISTS user_roles_user_fk;
-    ALTER TABLE public.user_roles DROP CONSTRAINT IF EXISTS user_roles_pkey;
-
-    -- Restore single-column PK on user_id (WARNING: will fail if multiple rows per user exist)
     DO $$
     BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint
-        WHERE conname = 'user_roles_pkey' AND conrelid = 'public.user_roles'::regclass
-      ) THEN
-        ALTER TABLE public.user_roles
-          ADD CONSTRAINT user_roles_pkey PRIMARY KEY (user_id);
+      IF to_regclass('public.user_roles') IS NOT NULL THEN
+        -- Drop FK and composite PK if present
+        BEGIN
+          ALTER TABLE public.user_roles DROP CONSTRAINT IF EXISTS user_roles_user_fk;
+          ALTER TABLE public.user_roles DROP CONSTRAINT IF EXISTS user_roles_pkey;
+        EXCEPTION WHEN undefined_table THEN
+          NULL;
+        END;
+
+        -- Restore single-column PK on user_id if needed
+        IF NOT EXISTS (
+          SELECT 1
+          FROM pg_constraint
+          WHERE conname = 'user_roles_pkey'
+            AND conrelid = 'public.user_roles'::regclass
+        ) THEN
+          ALTER TABLE public.user_roles
+            ADD CONSTRAINT user_roles_pkey PRIMARY KEY (user_id);
+        END IF;
+
+        -- Drop helper index
+        DROP INDEX IF EXISTS user_roles_user_id_idx;
       END IF;
     END $$;
-
-    -- Optional: drop the helper index (PK already indexes user_id)
-    DROP INDEX IF EXISTS user_roles_user_id_idx;
   `);
 }
