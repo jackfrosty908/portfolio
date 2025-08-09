@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import FormInput from '@/client/features/common/components/atoms/form-input';
 import { Button } from '@/client/features/common/components/ui/button';
@@ -21,6 +21,14 @@ import { loginSchema } from '@/common/actions/supabase/schema';
 import logger from '@/logger';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
+
+type NextRedirectError = { digest: string };
+const isNextRedirectError = (e: unknown): e is NextRedirectError =>
+  typeof e === 'object' &&
+  e !== null &&
+  'digest' in e &&
+  typeof (e as NextRedirectError).digest === 'string' &&
+  (e as NextRedirectError).digest.startsWith('NEXT_REDIRECT');
 
 const LoginFeature = () => {
   const [serverError, setServerError] = useState<string>('');
@@ -40,24 +48,23 @@ const LoginFeature = () => {
   const onSubmit = async (data: LoginFormValues): Promise<void> => {
     setIsLoading(true);
     setServerError('');
-
     try {
       const formData = new FormData();
       formData.append('email', data.email);
       formData.append('password', data.password);
-      
-      // Add redirect parameter if it exists
       if (redirectTo) {
         formData.append('redirectTo', redirectTo);
       }
 
-      const result = await login({}, formData);
-
+      const result = await login({}, formData); // server action will redirect on success
       if (result?.error) {
         setServerError(result.error);
       }
-    } catch (error) {
-      logger.error('Login failed:', error);
+    } catch (error: unknown) {
+      if (isNextRedirectError(error)) {
+        throw error; // let Next handle the redirect
+      }
+      logger.error('Login failed', error);
       setServerError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -70,10 +77,9 @@ const LoginFeature = () => {
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            {redirectTo === '/admin' 
+            {redirectTo === '/admin'
               ? 'Please login to access the admin panel'
-              : 'Enter your email below to login to your account'
-            }
+              : 'Enter your email below to login to your account'}
           </CardDescription>
         </CardHeader>
         <CardContent>
