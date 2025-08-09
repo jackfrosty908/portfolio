@@ -9,7 +9,7 @@ import {
   vi,
 } from 'vitest';
 import { loginSchema } from '@/common/actions/supabase/schema';
-import { forgotPassword, login, resetPassword, signup } from './actions';
+import { forgotPassword, login, signup } from './actions';
 
 // Mock Next.js functions
 vi.mock('next/cache', () => ({
@@ -283,79 +283,6 @@ describe('Supabase Actions', () => {
       ).toHaveBeenCalledWith('test@example.com', {
         redirectTo: 'http://localhost:3000/auth/reset-password',
       });
-    });
-  });
-
-  describe('resetPassword', () => {
-    it('should return validation errors for invalid passwords', async () => {
-      const formData = new FormData();
-      formData.append('password', 'short'); // Too short
-      formData.append('confirmPassword', 'different');
-
-      const result = await resetPassword({}, formData);
-
-      expect(result).toEqual({
-        errors: {
-          password: ['Password must be at least 8 characters.'],
-          confirmPassword: ["Passwords don't match"],
-        },
-      });
-      expect(mockSupabaseClient.auth.updateUser).not.toHaveBeenCalled();
-    });
-
-    it('should return validation error for mismatched passwords', async () => {
-      const formData = new FormData();
-      formData.append('password', 'password123');
-      formData.append('confirmPassword', 'differentpassword');
-
-      const result = await resetPassword({}, formData);
-
-      expect(result).toEqual({
-        errors: {
-          confirmPassword: ["Passwords don't match"],
-        },
-      });
-      expect(mockSupabaseClient.auth.updateUser).not.toHaveBeenCalled();
-    });
-
-    it('should return server error on update failure', async () => {
-      const formData = new FormData();
-      formData.append('password', 'newpassword123');
-      formData.append('confirmPassword', 'newpassword123');
-
-      mockSupabaseClient.auth.updateUser.mockResolvedValue({
-        error: { message: 'Failed to update password' },
-      });
-
-      const result = await resetPassword({}, formData);
-
-      expect(result).toEqual({
-        serverError: 'Failed to update password. Please try again.',
-      });
-      expect(mockSupabaseClient.auth.updateUser).toHaveBeenCalledWith({
-        password: 'newpassword123',
-      });
-    });
-
-    it('should redirect on successful password reset', async () => {
-      const formData = new FormData();
-      formData.append('password', 'newpassword123');
-      formData.append('confirmPassword', 'newpassword123');
-
-      mockSupabaseClient.auth.updateUser.mockResolvedValue({
-        error: null,
-      });
-      mockedRedirect.mockImplementation(() => {
-        throw new Error('REDIRECT'); // Simulate redirect
-      });
-
-      await expect(resetPassword({}, formData)).rejects.toThrow('REDIRECT');
-
-      expect(mockSupabaseClient.auth.updateUser).toHaveBeenCalledWith({
-        password: 'newpassword123',
-      });
-      expect(mockedRevalidatePath).toHaveBeenCalledWith('/', 'layout');
-      expect(mockedRedirect).toHaveBeenCalledWith('/login');
     });
   });
 });

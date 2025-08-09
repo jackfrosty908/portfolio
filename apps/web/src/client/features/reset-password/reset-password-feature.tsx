@@ -1,7 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { JSX } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import FormInput from '@/client/features/common/components/atoms/form-input';
@@ -14,10 +16,7 @@ import {
   CardTitle,
 } from '@/client/features/common/components/ui/card';
 import { Form } from '@/client/features/common/components/ui/form';
-import {
-  type ResetPasswordState,
-  resetPassword,
-} from '@/common/actions/supabase/actions';
+import { createClient as createSupabaseClient } from '@/client/utils/supabase-client';
 
 const formSchema = z
   .object({
@@ -33,22 +32,88 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-const initialState: ResetPasswordState = {};
-
-const ResetPasswordFeature = () => {
-  const [state, formAction, pending] = useActionState(
-    resetPassword,
-    initialState
+const ResetPasswordFeature = (): JSX.Element => {
+  const router = useRouter();
+  const [ready, setReady] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
+  const [sessionError, setSessionError] = useState<string | undefined>(
+    undefined
   );
+  const [submitError, setSubmitError] = useState<string | undefined>(undefined);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: { password: '', confirmPassword: '' },
     mode: 'onChange',
   });
+
+  useEffect((): (() => void) | undefined => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const supabase = createSupabaseClient();
+    const hash = window.location.hash ?? '';
+    const params = new URLSearchParams(
+      hash.startsWith('#') ? hash.slice(1) : hash
+    );
+    const access_token = params.get('access_token');
+    const refresh_token = params.get('refresh_token');
+
+    const cleanUrl = () => {
+      if (window.location.hash) {
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname + window.location.search
+        );
+      }
+    };
+
+    const init = async () => {
+      if (access_token && refresh_token) {
+        const { error } = await supabase.auth.setSession({
+          access_token,
+          refresh_token,
+        });
+        if (error) {
+          setSessionError(error.message);
+        }
+      }
+      const { data } = await supabase.auth.getSession();
+      setReady(Boolean(data.session));
+      cleanUrl();
+    };
+
+    init();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      // do nothing
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const onSubmit = async (values: FormValues): Promise<void> => {
+    setSubmitError(undefined);
+    setPending(true);
+    const supabase = createSupabaseClient();
+
+    const { error } = await supabase.auth.updateUser({
+      password: values.password,
+    });
+    setPending(false);
+
+    if (error) {
+      setSubmitError(error.message);
+      return;
+    }
+
+    router.push('/login');
+  };
 
   return (
     <div className="flex h-screen w-full items-center justify-center p-4">
@@ -59,13 +124,15 @@ const ResetPasswordFeature = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={formAction} className="flex flex-col gap-2">
+            <form
+              className="flex flex-col gap-2"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <FormInput
                 form={form}
                 label="New Password"
                 name="password"
                 placeholder=""
-                state={state}
                 type="password"
               />
               <FormInput
@@ -73,16 +140,23 @@ const ResetPasswordFeature = () => {
                 label="Confirm Password"
                 name="confirmPassword"
                 placeholder=""
-                state={state}
                 type="password"
               />
-
               <div className="flex flex-col gap-3">
-                <Button className="w-full" disabled={pending} type="submit">
+                <Button
+                  className="w-full"
+                  disabled={pending || !ready}
+                  type="submit"
+                >
                   {pending ? 'Updating...' : 'Update password'}
                 </Button>
-                {state?.serverError && (
-                  <p className="text-red-500 text-sm">{state.serverError}</p>
+                {!ready && (
+                  <p className="text-sm">Preparing your reset session…</p>
+                )}
+                {(sessionError || submitError) && (
+                  <p className="text-red-500 text-sm">
+                    {sessionError ?? submitError}
+                  </p>
                 )}
               </div>
             </form>
