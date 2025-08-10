@@ -16,7 +16,6 @@ export default buildConfig({
 
   // Define and configure collections in this array
   collections: [Users],
-
   // Payload secret - should be a complex and secure string, unguessable
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({
@@ -24,6 +23,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_DATABASE_URI,
     },
+
+    migrationDir: './src/payload/drizzle/migrations',
     push: false, // Disable push to avoid conflicts with migrations
     idType: 'uuid', // use UUID v4 for all collection IDs
     // Add custom tables here so Payload knows about them
