@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres';
+import { uuid } from '@payloadcms/db-postgres/drizzle/pg-core';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { buildConfig } from 'payload';
 import { Users } from './payload/collections/users';
@@ -40,6 +41,31 @@ export default buildConfig({
           [appPermissionEnum.enumName]: appPermissionEnum,
         },
       }),
+    ],
+    afterSchemaInit: [
+      ({ schema, extendTable }) => {
+        for (const [tableName, table] of Object.entries(schema.tables)) {
+          const columns: Record<string, ReturnType<typeof uuid>> = {};
+
+          // Only force UUID for the users PK
+          if (tableName === 'users' && 'id' in table) {
+            columns.id = uuid('id').primaryKey();
+          }
+
+          // Only force UUID for FKs explicitly named users_id
+          for (const [colKey, col] of Object.entries(table)) {
+            const colName = (col as { name?: string })?.name;
+            if (colName === 'users_id') {
+              columns[colKey] = uuid('users_id');
+            }
+          }
+
+          if (Object.keys(columns).length) {
+            extendTable({ table: schema.tables[tableName], columns });
+          }
+        }
+        return schema;
+      },
     ],
   }),
   // If you want to resize images, crop, set focal point, etc.
