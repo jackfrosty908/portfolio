@@ -4,7 +4,7 @@ import {
   primaryKey,
   uuid,
 } from '@payloadcms/db-postgres/drizzle/pg-core';
-import { appRoleEnum } from '../enums/appRoles';
+import { appRoleEnum } from '../enums/app-roles';
 
 export const userRoles = pgTable(
   'user_roles',

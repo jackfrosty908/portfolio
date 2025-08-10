@@ -1,6 +1,6 @@
 import { bigint, pgTable } from '@payloadcms/db-postgres/drizzle/pg-core';
-import { appPermissionEnum } from '../enums/appPermissions';
-import { appRoleEnum } from '../enums/appRoles';
+import { appPermissionEnum } from '../enums/app-permissions';
+import { appRoleEnum } from '../enums/app-roles';
 
 // Define your enums
 

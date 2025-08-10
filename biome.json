@@ -13,7 +13,9 @@
       "**",
       "!apps/web/src/client/features/common/components/ui/**",
       "!apps/web/payload-types.ts",
-      "!apps/web/src/migrations/**"
+      "!apps/web/src/migrations/**",
+      "!apps/web/src/app/(payload)/**",
+      "!apps/web/src/payload/drizzle/migrations/**"
     ]
   }
 }

@@ -1,5 +1,5 @@
 import { pgEnum } from '@payloadcms/db-postgres/drizzle/pg-core';
-import type { GenericEnum } from './types.d';
+import type { GenericEnum } from './types';
 
 export const appPermissionEnum: GenericEnum = pgEnum('app_permission', [
   'content.create',

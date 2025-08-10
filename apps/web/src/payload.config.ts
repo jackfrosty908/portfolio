@@ -3,10 +3,10 @@ import { uuid } from '@payloadcms/db-postgres/drizzle/pg-core';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { buildConfig } from 'payload';
 import { Users } from './payload/collections/users';
-import { appPermissionEnum } from './payload/drizzle/enums/appPermissions';
-import { appRoleEnum } from './payload/drizzle/enums/appRoles';
-import { rolePermissions } from './payload/drizzle/tables/role_permissions';
-import { userRoles } from './payload/drizzle/tables/user_roles';
+import { appPermissionEnum } from './payload/drizzle/enums/app-permissions';
+import { appRoleEnum } from './payload/drizzle/enums/app-roles';
+import { rolePermissions } from './payload/drizzle/tables/role-permissions';
+import { userRoles } from './payload/drizzle/tables/user-roles';
 
 export default buildConfig({
   admin: { user: 'users' },
