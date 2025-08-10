@@ -41,6 +41,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.60.0",
+    "require-in-the-middle": "^7.5.2",
     "server-only": "^0.0.1",
     "sharp": "^0.34.3",
     "sonner": "^2.0.5",
