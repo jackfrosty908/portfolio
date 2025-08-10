@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -30,11 +29,9 @@ const isNextRedirectError = (e: unknown): e is NextRedirectError =>
   typeof (e as NextRedirectError).digest === 'string' &&
   (e as NextRedirectError).digest.startsWith('NEXT_REDIRECT');
 
-const LoginFeature = () => {
+const LoginFeature = ({ redirectTo }: { redirectTo: string }) => {
   const [serverError, setServerError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo');
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
