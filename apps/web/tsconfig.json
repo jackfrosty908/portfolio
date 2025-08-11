@@ -14,6 +14,7 @@
     "verbatimModuleSyntax": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
@@ -22,7 +23,8 @@
     "paths": {
       "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"],
       "@/middleware/*": ["./src/middleware/*"],
-      "@/logger": ["./src/common/utils/logger/logger.ts"]
+      "@/logger": ["./src/common/utils/logger/logger.ts"],
+      "@payload-config": ["./src/payload.config.ts"]
     },
     "strictNullChecks": true
   },
@@ -32,7 +34,8 @@
     "./.next/types/**/*.ts",
     "./next-env.d.ts",
     ".next/types/**/*.ts",
-    "vitest.config.mjs"
+    "vitest.config.mjs",
+    "next.config.ts"
   ],
   "exclude": ["./node_modules"],
   "references": [
