@@ -1,5 +1,5 @@
 import type { Tag as TagType } from '@payload-types';
-import Tag from '@/client/features/blog-post/components/atoms/Tag';
+import Tag from '@/client/features/blog-post/components/atoms/tag/tag';
 
 const TagList = ({ tags }: { tags: TagType[] }) => {
   return (

@@ -1,7 +1,7 @@
 import type { Post as PostType, Tag as TagType, User } from '@payload-types';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import Page from './BlogPostFeature';
+import Page from './blog-post-feature';
 
 // Hoisted mocks
 const { mockCreateClient, mockQuery } = vi.hoisted(() => ({
@@ -43,7 +43,7 @@ vi.mock('@/client/features/common/components/ui/card', () => ({
   ),
 }));
 
-vi.mock('@/client/features/rich-text/RichTextFeature', () => ({
+vi.mock('@/client/features/rich-text/rich-text-feature', () => ({
   default: ({ content }: { content: unknown }) => (
     <div data-testid="rich-text">{content ? 'Rich content' : 'No content'}</div>
   ),

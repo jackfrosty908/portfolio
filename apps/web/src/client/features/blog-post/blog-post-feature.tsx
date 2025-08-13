@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import type { Post as PostType, Tag, User } from '@payload-types';
 import dayjs from 'dayjs';
 import type { ReactElement } from 'react';
-import TagList from '@/client/features/blog-post/components/molecules/TagList';
+import TagList from '@/client/features/blog-post/components/molecules/tag-list/tag-list';
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/client/features/common/components/ui/card';
-import RichTextFeature from '@/client/features/rich-text/RichTextFeature';
+import RichTextFeature from '@/client/features/rich-text/rich-text-feature';
 import createApolloClient from '@/server/integrations/payload-client/client';
 
 type PostsResponse = { Posts: { docs: PostType[] } };

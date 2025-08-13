@@ -8,8 +8,8 @@ import {
 import type { ReactElement } from 'react';
 import type { Post as PostType } from '../../../../payload-types';
 import { Paragraph } from '../common/components/typography';
-import HeadingConverter from './molecules/heading-converter/HeadingConverter';
-import ParagraphConverter from './molecules/paragraph-converter/ParagraphConverter';
+import HeadingConverter from './molecules/heading-converter/heading-converter';
+import ParagraphConverter from './molecules/paragraph-converter/paragraph-converter';
 
 type Props = { content: PostType['content'] | string | null | undefined };
 

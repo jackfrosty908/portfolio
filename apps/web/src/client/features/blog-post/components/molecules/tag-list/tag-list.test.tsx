@@ -1,7 +1,7 @@
 import type { Tag as TagType } from '@payload-types';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import TagList from './TagList';
+import TagList from './tag-list';
 
 afterEach(() => {
   cleanup();

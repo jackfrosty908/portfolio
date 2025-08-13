@@ -6,7 +6,7 @@ type FeatureProps = { id: string };
 
 const { capture } = vi.hoisted(() => ({ capture: { id: '' as string } }));
 
-vi.mock('@/client/features/blog-post/BlogPostFeature', () => ({
+vi.mock('@/client/features/blog-post/blog-post-feature', () => ({
   default: ({ id }: FeatureProps) => {
     capture.id = id;
     return <div data-id={id} data-testid="blog-post-feature" />;

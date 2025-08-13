@@ -2,7 +2,7 @@ import type { SerializedParagraphNode } from '@payloadcms/richtext-lexical';
 import { cleanup, render, screen } from '@testing-library/react';
 import type { JSX, ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import ParagraphConverter from './ParagraphConverter';
+import ParagraphConverter from './paragraph-converter';
 
 type ConverterFn = (args: {
   node: SerializedParagraphNode;

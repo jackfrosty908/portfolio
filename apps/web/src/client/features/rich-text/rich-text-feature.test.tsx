@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import HeadingConverter from './molecules/heading-converter/HeadingConverter';
-import ParagraphConverter from './molecules/paragraph-converter/ParagraphConverter';
-import RichTextFeature from './RichTextFeature';
+import HeadingConverter from './molecules/heading-converter/heading-converter';
+import ParagraphConverter from './molecules/paragraph-converter/paragraph-converter';
+import RichTextFeature from './rich-text-feature';
 
 type LexicalProps = {
   converters: (args: {
