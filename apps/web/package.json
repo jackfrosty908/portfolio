@@ -32,6 +32,7 @@
     "@trpc/tanstack-react-query": "^11.4.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "graphql": "^16.11.0",
     "jose": "^6.0.12",
     "lucide-react": "^0.487.0",
