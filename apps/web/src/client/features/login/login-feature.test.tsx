@@ -13,7 +13,7 @@ vi.mock('@/common/actions/supabase/actions', () => ({
 }));
 
 vi.mock('@/client/features/common/components/atoms/form-input', () => ({
-  default: vi.fn(({ name, label, placeholder, type, _, labelSuffix }) => (
+  default: vi.fn(({ name, label, placeholder, type, labelSuffix }) => (
     <div>
       <label htmlFor={name}>{label}</label>
       <input
@@ -36,7 +36,7 @@ describe('LoginFeature', () => {
   });
 
   it('should render the form with all fields', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     expect(screen.getByText('Login to your account')).toBeInTheDocument();
     expect(
@@ -48,7 +48,7 @@ describe('LoginFeature', () => {
   });
 
   it('should show forgot password link', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const forgotPasswordLink = screen.getByText('Forgot your password?');
     expect(forgotPasswordLink).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('LoginFeature', () => {
   });
 
   it('should show sign up link', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const signUpLink = screen.getByText('Sign up');
     expect(signUpLink).toBeInTheDocument();
@@ -64,18 +64,18 @@ describe('LoginFeature', () => {
   });
 
   it('should disable submit button initially', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const submitButton = screen.getByRole('button', { name: 'Login' });
     expect(submitButton).toBeDisabled();
   });
 
   it('should render without crashing', () => {
-    expect(() => render(<LoginFeature />)).not.toThrow();
+    expect(() => render(<LoginFeature redirectTo="/" />)).not.toThrow();
   });
 
   it('should have correct form structure', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const form = screen.getByTestId('input-email').closest('form');
     expect(form).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('LoginFeature', () => {
   });
 
   it('should have proper accessibility attributes', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const emailLabel = screen.getByText('Email');
     const passwordLabel = screen.getByText('Password');
@@ -103,7 +103,7 @@ describe('LoginFeature', () => {
   });
 
   it('should have proper card structure', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const card = screen
       .getByTestId('input-email')
@@ -120,7 +120,7 @@ describe('LoginFeature', () => {
   });
 
   it('should have proper button attributes', () => {
-    render(<LoginFeature />);
+    render(<LoginFeature redirectTo="/" />);
 
     const submitButton = screen.getByRole('button', { name: 'Login' });
     expect(submitButton).toHaveAttribute('type', 'submit');

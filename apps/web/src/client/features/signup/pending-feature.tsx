@@ -14,7 +14,7 @@ const PendingFeature = () => {
           <MailIcon className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
           <CardTitle>Thank you for signing up!</CardTitle>
           <CardDescription>
-            We've sent a verification link to your email. Please check your
+            We&apos;ve sent a verification link to your email. Please check your
             inbox to complete your registration.
           </CardDescription>
         </CardHeader>

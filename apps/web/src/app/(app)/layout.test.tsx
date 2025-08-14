@@ -32,10 +32,11 @@ describe('RootLayout', () => {
   });
 
   it('renders without crashing', () => {
-    const component = createElement(RootLayout, {
-      // biome-ignore lint/correctness/noChildrenProp: test mock
-      children: createElement('div', {}, 'Test content'),
-    });
+    const component = (
+      <RootLayout>
+        <div>Test content</div>
+      </RootLayout>
+    );
     expect(component).toBeDefined();
     expect(component.type).toBe(RootLayout);
   });
