@@ -12,12 +12,38 @@ const defaultOptions: DefaultOptions = {
   query: { fetchPolicy: 'no-cache' },
 };
 
+const PAYLOAD_GRAPHQL_URI_REGEX = /\/\/$/;
+
+//TODO: JF Manage this with variable manager
+const resolvePayloadGraphqlUri = (): string => {
+  const explicit = process.env.PAYLOAD_URL?.trim();
+  if (explicit) {
+    return explicit;
+  }
+
+  const domain = process.env.VERCEL_URL || process.env.VERCEL_BRANCH_URL;
+  if (domain) {
+    return `https://${domain}/api/graphql`;
+  }
+
+  const site = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
+  if (site) {
+    return `${site.replace(PAYLOAD_GRAPHQL_URI_REGEX, '')}/api/graphql`;
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3000/api/graphql';
+  }
+
+  return 'http://localhost:3000/api/graphql';
+};
+
 const createApolloClient = (): ApolloClient<unknown> =>
   new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),
     link: new HttpLink({
-      uri: process.env.PAYLOAD_URL,
+      uri: resolvePayloadGraphqlUri(),
       fetch: (uri, options) =>
         fetch(uri, {
           ...options,
