@@ -12,7 +12,7 @@ const defaultOptions: DefaultOptions = {
   query: { fetchPolicy: 'no-cache' },
 };
 
-const PAYLOAD_GRAPHQL_URI_REGEX = /\/\/$/;
+const PAYLOAD_GRAPHQL_URI_REGEX = /\/$/;
 
 //TODO: JF Manage this with variable manager
 const resolvePayloadGraphqlUri = (): string => {
@@ -38,18 +38,54 @@ const resolvePayloadGraphqlUri = (): string => {
   return 'http://localhost:3000/api/graphql';
 };
 
+const mergeHeaders = (
+  base?: HeadersInit,
+  extra?: Record<string, string>
+): HeadersInit => {
+  if (!extra || Object.keys(extra).length === 0) {
+    return base ?? {};
+  }
+  if (!base) {
+    return extra;
+  }
+  if (base instanceof Headers) {
+    const h = new Headers(base);
+    for (const [k, v] of Object.entries(extra)) {
+      h.set(k, v);
+    }
+    return h;
+  }
+  if (Array.isArray(base)) {
+    const h = new Headers(base);
+    for (const [k, v] of Object.entries(extra)) {
+      h.set(k, v);
+    }
+    return h;
+  }
+  return { ...base, ...extra };
+};
+
 const createApolloClient = (): ApolloClient<unknown> =>
   new ApolloClient({
     ssrMode: true,
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: resolvePayloadGraphqlUri(),
-      fetch: (uri, options) =>
-        fetch(uri, {
-          ...options,
+      fetch: (input, init) => {
+        const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim();
+        const headers = secret
+          ? mergeHeaders(init?.headers, {
+              'x-vercel-protection-bypass': secret,
+            })
+          : init?.headers;
+
+        return fetch(input, {
+          ...init,
+          headers,
           cache: 'no-store',
           next: { revalidate: 0 },
-        }),
+        });
+      },
     }),
     defaultOptions,
   });
