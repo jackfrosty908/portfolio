@@ -24,7 +24,8 @@
       "@/*": ["./src/*", "./src/client/*", "./src/client/features/*", "../*"],
       "@/middleware/*": ["./src/middleware/*"],
       "@/logger": ["./src/common/utils/logger/logger.ts"],
-      "@payload-config": ["./src/payload.config.ts"]
+      "@payload-config": ["./src/payload.config.ts"],
+      "@payload-types": ["./payload-types.ts"]
     },
     "strictNullChecks": true
   },

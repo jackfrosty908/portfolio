@@ -1,4 +1,5 @@
-import type { UseFormReturn } from 'react-hook-form';
+import type { JSX } from 'react';
+import type { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 import {
   FormControl,
   FormField,
@@ -8,20 +9,19 @@ import {
 } from '@/client/features/common/components/ui/form';
 import { Input } from '@/client/features/common/components/ui/input';
 
-interface FormInputProps {
-  // biome-ignore lint/suspicious/noExplicitAny: form is a generic type
-  form: UseFormReturn<any>;
-  name: string;
+interface FormInputProps<TFieldValues extends FieldValues = FieldValues> {
+  form: UseFormReturn<TFieldValues>;
+  name: FieldPath<TFieldValues>;
   label: string;
   placeholder: string;
   type?: string;
   state?: {
-    errors?: Record<string, string[]>;
+    errors?: Partial<Record<FieldPath<TFieldValues>, string[]>>;
   };
   labelSuffix?: React.ReactNode;
 }
 
-const FormInput = ({
+const FormInput = <TFieldValues extends FieldValues = FieldValues>({
   form,
   name,
   label,
@@ -29,7 +29,7 @@ const FormInput = ({
   type = 'text',
   state,
   labelSuffix,
-}: FormInputProps) => {
+}: FormInputProps<TFieldValues>): JSX.Element => {
   return (
     <FormField
       control={form.control}
