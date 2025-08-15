@@ -87,6 +87,7 @@ describe('EditorPage', () => {
     it('does not render the page content', async () => {
       try {
         await EditorPage();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         // Expected redirect error
       }

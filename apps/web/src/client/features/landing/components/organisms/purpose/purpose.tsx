@@ -9,8 +9,8 @@ const Purpose = () => {
           What This Site Is For
         </h2>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          More than just a portfolio - it's a living showcase of development and
-          learning
+          More than just a portfolio - it&apos;s a living showcase of
+          development and learning
         </p>
       </div>
 

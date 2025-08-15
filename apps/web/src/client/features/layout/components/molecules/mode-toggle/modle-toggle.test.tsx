@@ -36,7 +36,7 @@ type DropdownMenuItemProps = ComponentProps<
 };
 
 vi.mock('@/client/features/common/components/ui/button', () => ({
-  Button: ({ children, variant, size, ...props }: ButtonProps) =>
+  Button: ({ children, ...props }: ButtonProps) =>
     createElement(
       'button',
       { 'data-testid': 'theme-toggle-button', type: 'button', ...props },

@@ -22,8 +22,7 @@ export const Users: CollectionConfig = {
       const perms = u?.claims?.permissions ?? [];
       return Array.isArray(perms) && perms.includes('user.manage');
     },
-    read: ({ req, id }) =>
-      req.user ? (id ? req.user.id === id : true) : false,
+    read: () => true,
     update: ({ req, id }) => (req.user ? req.user.id === id : false),
     delete: () => false,
   },
